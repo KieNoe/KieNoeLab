@@ -1,4 +1,4 @@
-# althamcraft
+# KieNoeLab
 
 基于 Vue 3 + TypeScript + Vite 的实验室管理系统前端项目。
 
