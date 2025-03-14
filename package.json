@@ -16,6 +16,7 @@
     "@vueuse/core": "^12.8.2",
     "axios": "^1.7.9",
     "element-plus": "^2.9.5",
+    "matter-js": "^0.20.0",
     "pinia": "^3.0.1",
     "vanilla-tilt": "^1.8.1",
     "vue": "^3.5.13",
