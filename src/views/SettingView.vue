@@ -57,8 +57,6 @@ const handleFileChange = (event: Event) => {
   const reader = new FileReader()
   reader.readAsDataURL(file)
   reader.onload = () => {
-    // 清除已存在的头像数据
-    localStorage.removeItem('userAvatar')
     previewUrl.value = reader.result as string
     // 存入新的头像数据
     localStorage.setItem('userAvatar', previewUrl.value)

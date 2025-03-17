@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRoute } from 'vue-router'
 import { useGlobalStore } from '@/stores/pageLoad'
-import { watch } from 'vue'
+import { watch, ref } from 'vue'
 import { useAboutStatus } from '@/stores/aboutStatus'
 import { toRefs } from 'vue'
+
+const route = useRoute()
+
+const navigation = ref<HTMLElement | null>(null)
+const square = ref<HTMLElement | null>(null)
 
 const globalStore = useGlobalStore()
 const aboutStore = useAboutStatus()
@@ -39,14 +44,14 @@ const handleAboutClick = (type: string) => {
       break
   }
 }
-
+const toggleSquare = () => {
+  navigation.value?.classList.toggle('open')
+}
 onMounted(() => {
-  const navigation = document.querySelector('.navigation') as HTMLElement
-  const square = document.querySelector('.square') as HTMLElement
   const list = document.querySelectorAll('.list')
   const routerLink = document.querySelectorAll('.router-link') as NodeListOf<HTMLElement>
   function iconRender() {
-    list.forEach((item) => {
+    list.forEach((item: Element) => {
       item.classList.remove('active')
     })
     document.querySelector(`.${globalStore.iRenderName.name}`)?.classList.add('active')
@@ -56,34 +61,30 @@ onMounted(() => {
     () => globalStore.iRenderName.name,
     () => iconRender()
   )
-
-  square.onclick = function () {
-    navigation.classList.toggle('open')
-  }
-  square.addEventListener('mousemove', () => {
-    square.classList.add('active')
+  square.value?.addEventListener('mousemove', () => {
+    square.value?.classList.add('active')
   })
-  square.addEventListener('mouseleave', () => {
-    square.classList.remove('active')
+  square.value?.addEventListener('mouseleave', () => {
+    square.value?.classList.remove('active')
   })
   const activeLink = (e: Event) => {
-    list.forEach((item) => item.classList.remove('active'))
+    list.forEach((item: Element) => item.classList.remove('active'))
     ;(e.currentTarget as HTMLElement).classList.add('active')
   }
-  list.forEach((item) => item.addEventListener('click', activeLink))
+  list.forEach((item: Element) => item.addEventListener('click', activeLink))
   routerLink.forEach((item) =>
     item.addEventListener('click', () => {
-      if (navigation.classList.contains('open')) {
-        navigation.classList.toggle('open')
+      if (navigation.value?.classList.contains('open')) {
+        navigation.value?.classList.toggle('open')
       }
     })
   )
-  list.forEach((item) =>
+  list.forEach((item: Element) =>
     item.addEventListener('mouseenter', () => {
       item.classList.add('selected')
     })
   )
-  list.forEach((item) =>
+  list.forEach((item: Element) =>
     item.addEventListener('mouseleave', () => {
       item.classList.remove('selected')
     })
@@ -101,64 +102,104 @@ onMounted(() => {
 })
 </script>
 <template>
-  <div class="navigation">
+  <div class="navigation" ref="navigation">
     <div class="menuToggle"></div>
-    <div class="square"></div>
-    <ul>
+    <div class="square" ref="square" @click="toggleSquare"></div>
+    <ul v-show="route.name !== 'lab'">
       <li class="list home active" style="--clr: #f44336">
-        <RouterLink to="/" class="router-link">
+        <RouterLink ref="router-link" to="/" class="router-link">
           <span class="icon"><ion-icon name="home-outline"></ion-icon></span>
           <span class="text">首页</span>
         </RouterLink>
       </li>
       <li class="list me" style="--clr: #ffa117">
-        <RouterLink to="/me" class="router-link">
+        <RouterLink ref="router-link" to="/me" class="router-link">
           <span class="icon"><ion-icon name="person-outline"></ion-icon></span>
           <span class="text">我</span>
         </RouterLink>
       </li>
       <li class="list more" style="--clr: #0fc70f">
-        <RouterLink to="/more" class="router-link">
+        <RouterLink ref="router-link" to="/more" class="router-link">
           <span class="icon"><ion-icon name="pricetags-outline"></ion-icon></span>
           <span class="text">更多</span>
         </RouterLink>
       </li>
       <li class="list help" style="--clr: #2196f3">
-        <RouterLink to="/help" class="router-link">
+        <RouterLink ref="router-link" to="/help" class="router-link">
           <span class="icon"><ion-icon name="help-circle-outline"></ion-icon></span>
           <span class="text">帮助</span>
         </RouterLink>
       </li>
       <li class="list setting" style="--clr: #b145e9">
-        <RouterLink to="/setting" class="router-link">
+        <RouterLink ref="router-link" to="/setting" class="router-link">
           <span class="icon"><ion-icon name="settings-outline"></ion-icon></span>
           <span class="text">设置</span>
         </RouterLink>
       </li>
       <li class="list feedback" style="--clr: #3c6e71">
-        <RouterLink to="/feedback" class="router-link">
+        <RouterLink ref="router-link" to="/feedback" class="router-link">
           <span class="icon"><ion-icon name="alert-circle-outline"></ion-icon></span>
           <span class="text">反馈</span>
         </RouterLink>
       </li>
     </ul>
-    <div class="detail">
+    <ul v-show="route.name === 'lab'">
+      <li class="list brush" style="--clr: #ffa117">
+        <RouterLink ref="router-link" to="/lab" class="router-link">
+          <span class="icon"><ion-icon name="brush-outline"></ion-icon></span>
+          <span class="text">画笔</span>
+        </RouterLink>
+      </li>
+      <li class="list comment" style="--clr: #2196f3">
+        <RouterLink ref="router-link" to="/lab" class="router-link">
+          <span class="icon"><ion-icon name="chatbox-outline"></ion-icon></span>
+          <span class="text">注释</span>
+        </RouterLink>
+      </li>
+      <li class="list parameter" style="--clr: #f44336">
+        <RouterLink ref="router-link" to="/lab" class="router-link">
+          <span class="icon"><ion-icon name="cog-outline"></ion-icon></span>
+          <span class="text">参数调整</span>
+        </RouterLink>
+      </li>
+    </ul>
+    <div class="detail" v-if="route.name !== 'lab'">
       <p>
-        <RouterLink to="/about" class="router-link" @click="handleAboutClick('me')"
+        <RouterLink
+          ref="router-link"
+          to="/about"
+          class="router-link"
+          @click="handleAboutClick('me')"
           >关于我</RouterLink
-        ><RouterLink to="/about" class="router-link" @click="handleAboutClick('copyright')"
+        ><RouterLink
+          ref="router-link"
+          to="/about"
+          class="router-link"
+          @click="handleAboutClick('copyright')"
           >版权</RouterLink
         >
       </p>
       <p>
-        <RouterLink to="/about" class="router-link" @click="handleAboutClick('terms')"
+        <RouterLink
+          ref="router-link"
+          to="/about"
+          class="router-link"
+          @click="handleAboutClick('terms')"
           >条款</RouterLink
-        ><RouterLink to="/about" class="router-link" @click="handleAboutClick('privacy')"
+        ><RouterLink
+          ref="router-link"
+          to="/about"
+          class="router-link"
+          @click="handleAboutClick('privacy')"
           >隐私权</RouterLink
         >
       </p>
       <p>
-        <RouterLink to="/about" class="router-link" @click="handleAboutClick('changelog')"
+        <RouterLink
+          ref="router-link"
+          to="/about"
+          class="router-link"
+          @click="handleAboutClick('changelog')"
           >更新日志</RouterLink
         >
       </p>
