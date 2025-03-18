@@ -5,8 +5,10 @@ import { useGlobalStore } from '@/stores/pageLoad'
 import { watch, ref } from 'vue'
 import { useAboutStatus } from '@/stores/aboutStatus'
 import { toRefs } from 'vue'
+import { useLabStore } from '@/stores/labStore'
 
 const route = useRoute()
+const labStore = useLabStore()
 
 const navigation = ref<HTMLElement | null>(null)
 const square = ref<HTMLElement | null>(null)
@@ -143,7 +145,14 @@ onMounted(() => {
         </RouterLink>
       </li>
     </ul>
+
     <ul v-show="route.name === 'lab'">
+      <li class="list start" style="--clr: #f44336" @click="labStore.toggleLab()">
+        <RouterLink ref="router-link" to="/lab" class="router-link">
+          <span class="icon"><ion-icon name="power-outline"></ion-icon></span>
+          <span class="text">开始</span>
+        </RouterLink>
+      </li>
       <li class="list brush" style="--clr: #ffa117">
         <RouterLink ref="router-link" to="/lab" class="router-link">
           <span class="icon"><ion-icon name="brush-outline"></ion-icon></span>
@@ -156,10 +165,16 @@ onMounted(() => {
           <span class="text">注释</span>
         </RouterLink>
       </li>
-      <li class="list parameter" style="--clr: #f44336">
+      <li class="list parameter" style="--clr: #b145e9" @click="labStore.toggleParameterModel()">
         <RouterLink ref="router-link" to="/lab" class="router-link">
           <span class="icon"><ion-icon name="cog-outline"></ion-icon></span>
           <span class="text">参数调整</span>
+        </RouterLink>
+      </li>
+      <li class="list changeMod" style="--clr: #0fc70f">
+        <RouterLink ref="router-link" to="/lab" class="router-link">
+          <span class="icon"><ion-icon name="swap-horizontal-outline"></ion-icon></span>
+          <span class="text">模式转换</span>
         </RouterLink>
       </li>
     </ul>
