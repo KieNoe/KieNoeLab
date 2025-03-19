@@ -30,19 +30,37 @@ onMounted(() => {
     engine: engine, // 绑定引擎
     options: {
       width: Number(width),
-      height: Number(height)
+      height: Number(height),
+      wireframes: false // 关闭线框模式
     }
   })
   // 5-1. 创建两个正方形
-  const boxA = Bodies.rectangle(400, 200, 80, 80)
+  const boxA = Bodies.rectangle(400, 200, 80, 80, {
+    render: {
+      fillStyle: 'lightblue',
+      strokeStyle: 'black',
+      lineWidth: 3
+    }
+  })
   const boxB = Bodies.rectangle(450, 50, 80, 80)
 
   // 5-2. 创建地面，将isStatic设为true，表示物体静止
-  const ground = Bodies.rectangle(Number(width) / 2, 610, Number(width), 60, { isStatic: true })
+  // 创建四个边界（地面、左墙、右墙、顶部）
+  const thickness = 20 // 墙的厚度
+  const ground = Bodies.rectangle(width / 2, height + thickness / 2, width, thickness, {
+    isStatic: true
+  })
+  const ceiling = Bodies.rectangle(width / 2, -thickness / 2, width, thickness, { isStatic: true })
+  const leftWall = Bodies.rectangle(-thickness / 2, height / 2, thickness, height, {
+    isStatic: true
+  })
+  const rightWall = Bodies.rectangle(width + thickness / 2, height / 2, thickness, height, {
+    isStatic: true
+  })
   // 创建鼠标实例
   const mouse = Matter.Mouse.create(render.canvas)
 
-  // 给鼠标添加约束
+  // 给鼠标添加约束·
   const mouseConstraint = Matter.MouseConstraint.create(engine, {
     mouse: mouse,
     constraint: {
@@ -54,7 +72,7 @@ onMounted(() => {
   })
 
   // 6. 将所有物体添加到世界中
-  Composite.add(engine.world, [boxA, boxB, ground, mouseConstraint])
+  Composite.add(engine.world, [boxA, boxB, ground, ceiling, leftWall, rightWall, mouseConstraint])
 
   // 7. 执行渲染操作
   Render.run(render)
@@ -65,6 +83,16 @@ onMounted(() => {
   // 9. 运行渲染器
   Runner.run(runner, engine)
 
+  // 监听 `afterRender` 事件，在画布上绘制 "A"
+  Matter.Events.on(render, 'afterRender', () => {
+    const ctx = render.context
+    ctx.fillStyle = 'black'
+    ctx.font = '30px Arial'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText('A', boxA.position.x, boxA.position.y)
+    ctx.fillText('B', boxB.position.x, boxB.position.y)
+  })
   // 重置实验
   const resetExperiment = () => {
     Matter.Body.setPosition(boxA, { x: 400, y: 200 }) // 复位 boxA

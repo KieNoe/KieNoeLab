@@ -150,13 +150,7 @@ onMounted(() => {
       <li class="list start" style="--clr: #f44336" @click="labStore.toggleLab()">
         <RouterLink ref="router-link" to="/lab" class="router-link">
           <span class="icon"><ion-icon name="power-outline"></ion-icon></span>
-          <span class="text">开始</span>
-        </RouterLink>
-      </li>
-      <li class="list brush" style="--clr: #ffa117">
-        <RouterLink ref="router-link" to="/lab" class="router-link">
-          <span class="icon"><ion-icon name="brush-outline"></ion-icon></span>
-          <span class="text">画笔</span>
+          <span class="text">重置事件</span>
         </RouterLink>
       </li>
       <li class="list comment" style="--clr: #2196f3">
