@@ -39,9 +39,22 @@ onMounted(() => {
 
   // 5-2. 创建地面，将isStatic设为true，表示物体静止
   const ground = Bodies.rectangle(Number(width) / 2, 610, Number(width), 60, { isStatic: true })
+  // 创建鼠标实例
+  const mouse = Matter.Mouse.create(render.canvas)
+
+  // 给鼠标添加约束
+  const mouseConstraint = Matter.MouseConstraint.create(engine, {
+    mouse: mouse,
+    constraint: {
+      stiffness: 0.2,
+      render: {
+        visible: false // 默认为 true，会显示鼠标拖拽轨迹
+      }
+    }
+  })
 
   // 6. 将所有物体添加到世界中
-  Composite.add(engine.world, [boxA, boxB, ground])
+  Composite.add(engine.world, [boxA, boxB, ground, mouseConstraint])
 
   // 7. 执行渲染操作
   Render.run(render)
@@ -100,38 +113,38 @@ onMounted(() => {
         <div class="object-params">
           <h3>物体参数</h3>
           <div class="param-switches">
-            <div class="positionShow">
+            <div class="positionShow" :class="showPosition ? 'openModel' : ''">
               <div class="switch-item">
                 <span>坐标显示</span>
                 <el-switch v-model="showPosition" />
               </div>
-              <div class="switch-item" v-if="showPosition">
+              <div class="switch-item" :class="showPosition ? '' : 'hidden'">
                 <span>X坐标</span>
                 <el-switch v-model="showPositionX" />
               </div>
-              <div class="switch-item" v-if="showPosition">
+              <div class="switch-item" :class="showPosition ? '' : 'hidden'">
                 <span>Y坐标</span>
                 <el-switch v-model="showPositionY" />
               </div>
             </div>
-            <div class="speedShow">
+            <div class="speedShow" :class="showVelocity ? 'openModel' : ''">
               <div class="switch-item">
                 <span>速率显示</span>
                 <el-switch v-model="showVelocity" />
               </div>
-              <div class="switch-item" v-if="showVelocity">
+              <div class="switch-item" :class="showVelocity ? '' : 'hidden'">
                 <span>速率大小</span>
                 <el-switch v-model="showVelocitySize" />
               </div>
-              <div class="switch-item" v-if="showVelocity">
+              <div class="switch-item" :class="showVelocity ? '' : 'hidden'">
                 <span>X方向速率</span>
                 <el-switch v-model="showVelocityX" />
               </div>
-              <div class="switch-item" v-if="showVelocity">
+              <div class="switch-item" :class="showVelocity ? '' : 'hidden'">
                 <span>Y方向速率</span>
                 <el-switch v-model="showYVelocity" />
               </div>
-              <div class="switch-item" v-if="showVelocity">
+              <div class="switch-item" :class="showVelocity ? '' : 'hidden'">
                 <span>运动朝向角度</span>
                 <el-switch v-model="showAngle" />
               </div>
@@ -181,6 +194,14 @@ onMounted(() => {
   height: 100%;
   overflow-y: auto;
 }
+.parameter-content h2 {
+  cursor: default;
+  font-size: 30px;
+  transition: 0.5s;
+}
+.parameter-content h2:hover {
+  font-size: 40px;
+}
 
 .parameter-title {
   font-size: 24px;
@@ -192,6 +213,7 @@ onMounted(() => {
 .physics-params,
 .object-params {
   margin-bottom: 30px;
+  transition: 0.5s;
 }
 
 .physics-params h3,
@@ -199,10 +221,24 @@ onMounted(() => {
   font-size: 18px;
   margin-bottom: 20px;
   color: #666;
+  cursor: default;
+  transition: 0.5s;
+}
+.physics-params h3:hover,
+.object-params h3:hover {
+  font-size: 24px;
 }
 
 .param-item {
   margin-bottom: 20px;
+  transition: 0.5s;
+}
+.param-item span {
+  transition: 0.5s;
+  cursor: default;
+}
+.param-item span:hover {
+  font-size: 22px;
 }
 
 .param-label {
@@ -216,14 +252,50 @@ onMounted(() => {
   flex-direction: column;
   gap: 15px;
 }
+.param-switches .el-switch {
+  transition: 0.5s;
+}
+.param-switches .el-switch:hover {
+  transform: scale(1.3);
+}
+.param-switches span {
+  font-size: 16px;
+  transition: 0.5s;
+  cursor: default;
+}
+.param-switches span:hover {
+  font-size: 22px;
+}
 
-.positionShow,
+.positionShow {
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  padding: 15px;
+  height: 84px;
+  margin-bottom: 15px;
+  overflow: hidden;
+  transition: 0.5s;
+}
+
 .speedShow {
   background-color: #f8f9fa;
   border-radius: 12px;
   padding: 15px;
+  height: 84px;
   margin-bottom: 15px;
-  transition: 0.5s;
+  overflow: hidden;
+  transition: 0.8s;
+}
+.positionShow:hover,
+.speedShow:hover {
+  transform: scale(1.05);
+  background: rgba(0, 0, 0, 0.1);
+}
+.positionShow.openModel {
+  height: 188px;
+}
+.speedShow.openModel {
+  height: 340px;
 }
 
 .switch-item {
@@ -232,6 +304,11 @@ onMounted(() => {
   align-items: center;
   padding: 10px 0;
   border-bottom: 1px solid #eee;
+  opacity: 1;
+  transition: 0.5s;
+}
+.switch-item.hidden {
+  opacity: 0;
 }
 
 .switch-item:last-child {
