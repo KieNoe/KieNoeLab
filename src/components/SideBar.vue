@@ -51,6 +51,7 @@ const toggleSquare = () => {
 }
 onMounted(() => {
   const list = document.querySelectorAll('.list')
+  const notLabList = document.querySelectorAll('.notOnLab .list')
   const routerLink = document.querySelectorAll('.router-link') as NodeListOf<HTMLElement>
   function iconRender() {
     list.forEach((item: Element) => {
@@ -73,7 +74,7 @@ onMounted(() => {
     list.forEach((item: Element) => item.classList.remove('active'))
     ;(e.currentTarget as HTMLElement).classList.add('active')
   }
-  list.forEach((item: Element) => item.addEventListener('click', activeLink))
+  notLabList.forEach((item: Element) => item.addEventListener('click', activeLink))
   routerLink.forEach((item) =>
     item.addEventListener('click', () => {
       if (navigation.value?.classList.contains('open')) {
@@ -107,7 +108,7 @@ onMounted(() => {
   <div class="navigation" ref="navigation">
     <div class="menuToggle"></div>
     <div class="square" ref="square" @click="toggleSquare"></div>
-    <ul v-show="route.name !== 'lab'">
+    <ul v-show="route.name !== 'lab'" class="notOnLab">
       <li class="list home active" style="--clr: #f44336">
         <RouterLink ref="router-link" to="/" class="router-link">
           <span class="icon"><ion-icon name="home-outline"></ion-icon></span>
@@ -146,7 +147,7 @@ onMounted(() => {
       </li>
     </ul>
 
-    <ul v-show="route.name === 'lab'">
+    <ul v-show="route.name === 'lab'" class="onLab">
       <li class="list start" style="--clr: #f44336" @click="labStore.toggleLab()">
         <RouterLink ref="router-link" to="/lab" class="router-link">
           <span class="icon"><ion-icon name="power-outline"></ion-icon></span>
