@@ -3,6 +3,7 @@ import { ref } from 'vue'
 
 export const useLabStore = defineStore('lab', () => {
   const startLab = ref(false)
+  const isTextOpen = ref(true)
   const isParameterOpen = ref(false)
 
   function toggleLab() {
@@ -11,6 +12,9 @@ export const useLabStore = defineStore('lab', () => {
   function toggleParameterModel() {
     isParameterOpen.value = !isParameterOpen.value
   }
+  function toggleTextModel() {
+    isTextOpen.value = !isTextOpen.value
+  }
 
-  return { startLab, toggleLab, isParameterOpen, toggleParameterModel }
+  return { startLab, toggleLab, isParameterOpen, toggleParameterModel, isTextOpen, toggleTextModel }
 })

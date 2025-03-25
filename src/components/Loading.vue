@@ -34,7 +34,7 @@ watch(
   box-sizing: border-box;
   width: 100%;
   height: 100%;
-  background: #48cae4;
+  background: #8cc8ff;
   z-index: 1000000;
   transform: translateX(100vw);
   transition: 0.7s ease;
@@ -43,7 +43,7 @@ watch(
 .layout {
   width: 100%;
   height: 100%;
-  background: #ade8f4;
+  background: #d9ebff;
   display: flex;
   justify-content: center;
   align-items: center;

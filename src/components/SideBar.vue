@@ -155,7 +155,12 @@ onMounted(() => {
         </RouterLink>
       </li>
       <li class="list comment" style="--clr: #2196f3">
-        <RouterLink ref="router-link" to="/lab" class="router-link">
+        <RouterLink
+          ref="router-link"
+          to="/lab"
+          class="router-link"
+          @click="labStore.toggleTextModel()"
+        >
           <span class="icon"><ion-icon name="chatbox-outline"></ion-icon></span>
           <span class="text">注释</span>
         </RouterLink>

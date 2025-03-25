@@ -1,20 +1,42 @@
+<!-- eslint-disable vue/require-v-for-key -->
 <script setup lang="ts">
 import Matter from 'matter-js'
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, reactive, onUnmounted, nextTick } from 'vue'
+import 'mathjax/es5/tex-mml-chtml.js'
 import { useLabStore } from '@/stores/labStore'
 
 const labStore = useLabStore()
 const containerRef = ref<HTMLElement | null>(null)
-const showYVelocity = ref(false)
-const showPosition = ref(false)
-const showVelocity = ref(false)
-const showPositionX = ref(false)
-const showPositionY = ref(false)
-const showVelocitySize = ref(false)
-const showVelocityX = ref(false)
-const showAngle = ref(false)
+const showPosition = ref(true)
+const showVelocity = ref(true)
+const frictionAir = ref(0)
+const gravity = ref(1)
+const friction = ref(0)
 
+// 触发 MathJax 渲染
+const renderMath = () => {
+  if (!window.MathJax) {
+    window.MathJax = {
+      tex: {
+        inlineMath: [
+          ['$', '$'],
+          ['\\(', '\\)']
+        ]
+      },
+      svg: { fontCache: 'global' }
+    }
+  }
+  window.MathJax.typesetPromise()
+}
+
+interface Box {
+  box: Matter.Body // 可以替换为更具体的类型
+  name: string
+}
+const boxList = reactive<Box[]>([])
+let animationFrameId: number | null = null
 onMounted(() => {
+  nextTick(() => renderMath())
   const { width, height } = containerRef.value!.getBoundingClientRect()
   const Engine = Matter.Engine
   const Render = Matter.Render
@@ -23,6 +45,7 @@ onMounted(() => {
   const Runner = Matter.Runner
   // 3. 创建引擎
   const engine = Engine.create()
+  engine.world.gravity.y = gravity.value
 
   // 4. 创建渲染器，并将引擎连接到画布上
   const render = Render.create({
@@ -36,26 +59,32 @@ onMounted(() => {
   })
   // 5-1. 创建两个正方形
   const boxA = Bodies.rectangle(400, 200, 80, 80, {
-    render: {
-      fillStyle: 'lightblue',
-      strokeStyle: 'black',
-      lineWidth: 3
-    }
+    frictionAir: frictionAir.value,
+    friction: friction.value
   })
-  const boxB = Bodies.rectangle(450, 50, 80, 80)
+  const boxB = Bodies.rectangle(450, 50, 80, 80, {
+    frictionAir: frictionAir.value,
+    friction: friction.value
+  })
 
   // 5-2. 创建地面，将isStatic设为true，表示物体静止
   // 创建四个边界（地面、左墙、右墙、顶部）
   const thickness = 20 // 墙的厚度
   const ground = Bodies.rectangle(width / 2, height + thickness / 2, width, thickness, {
-    isStatic: true
+    isStatic: true,
+    friction: friction.value
   })
-  const ceiling = Bodies.rectangle(width / 2, -thickness / 2, width, thickness, { isStatic: true })
+  const ceiling = Bodies.rectangle(width / 2, -thickness / 2, width, thickness, {
+    isStatic: true,
+    friction: friction.value
+  })
   const leftWall = Bodies.rectangle(-thickness / 2, height / 2, thickness, height, {
-    isStatic: true
+    isStatic: true,
+    friction: friction.value
   })
   const rightWall = Bodies.rectangle(width + thickness / 2, height / 2, thickness, height, {
-    isStatic: true
+    isStatic: true,
+    friction: friction.value
   })
   // 创建鼠标实例
   const mouse = Matter.Mouse.create(render.canvas)
@@ -81,7 +110,9 @@ onMounted(() => {
   const runner = Runner.create()
 
   // 9. 运行渲染器
-  Runner.run(runner, engine)
+  setTimeout(() => {
+    Runner.run(runner, engine)
+  }, 500)
 
   // 监听 `afterRender` 事件，在画布上绘制 "A"
   Matter.Events.on(render, 'afterRender', () => {
@@ -105,6 +136,24 @@ onMounted(() => {
     () => labStore.startLab,
     () => resetExperiment()
   )
+  boxList.push({ box: boxA, name: 'A' }, { box: boxB, name: 'B' })
+  // 添加实时更新函数
+  function updateBoxData() {
+    boxList.forEach((item) => {
+      // 强制触发响应式更新
+      item.box = { ...item.box }
+    })
+    animationFrameId = requestAnimationFrame(updateBoxData)
+  }
+  // 开始更新循环
+  updateBoxData()
+
+  // 在组件卸载时清理
+  onUnmounted(() => {
+    if (animationFrameId !== null) {
+      cancelAnimationFrame(animationFrameId)
+    }
+  })
 })
 </script>
 <template>
@@ -118,23 +167,15 @@ onMounted(() => {
           <h3>物理参数</h3>
           <div class="param-item">
             <span class="param-label">空气阻力</span>
-            <el-slider :min="0" :max="1" :step="0.1" />
+            <el-slider :min="0" :max="1" :step="0.1" v-model="frictionAir" />
           </div>
           <div class="param-item">
             <span class="param-label">重力</span>
-            <el-slider :min="0" :max="20" :step="0.5" />
+            <el-slider :min="0" :max="20" :step="0.5" v-model="gravity" />
           </div>
           <div class="param-item">
             <span class="param-label">摩擦力</span>
-            <el-slider :min="0" :max="1" :step="0.1" />
-          </div>
-          <div class="param-item">
-            <span class="param-label">静态摩擦</span>
-            <el-slider :min="0" :max="1" :step="0.1" />
-          </div>
-          <div class="param-item">
-            <span class="param-label">弹性</span>
-            <el-slider :min="0" :max="1" :step="0.1" />
+            <el-slider :min="0" :max="1" :step="0.1" v-model="friction" />
           </div>
         </div>
 
@@ -146,40 +187,52 @@ onMounted(() => {
                 <span>坐标显示</span>
                 <el-switch v-model="showPosition" />
               </div>
-              <div class="switch-item" :class="showPosition ? '' : 'hidden'">
-                <span>X坐标</span>
-                <el-switch v-model="showPositionX" />
-              </div>
-              <div class="switch-item" :class="showPosition ? '' : 'hidden'">
-                <span>Y坐标</span>
-                <el-switch v-model="showPositionY" />
-              </div>
             </div>
             <div class="speedShow" :class="showVelocity ? 'openModel' : ''">
               <div class="switch-item">
                 <span>速率显示</span>
                 <el-switch v-model="showVelocity" />
               </div>
-              <div class="switch-item" :class="showVelocity ? '' : 'hidden'">
-                <span>速率大小</span>
-                <el-switch v-model="showVelocitySize" />
-              </div>
-              <div class="switch-item" :class="showVelocity ? '' : 'hidden'">
-                <span>X方向速率</span>
-                <el-switch v-model="showVelocityX" />
-              </div>
-              <div class="switch-item" :class="showVelocity ? '' : 'hidden'">
-                <span>Y方向速率</span>
-                <el-switch v-model="showYVelocity" />
-              </div>
-              <div class="switch-item" :class="showVelocity ? '' : 'hidden'">
-                <span>运动朝向角度</span>
-                <el-switch v-model="showAngle" />
-              </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
+    <div class="paramLists">
+      <ul v-if="showPosition || showVelocity">
+        <li v-for="(box, index) in boxList" :key="index">
+          <span>{{ box.name }}:</span>
+          <span v-if="showPosition"
+            >X坐标：
+            <p>{{ Math.floor(box.box.position.x) }}</p></span
+          >
+          <span v-if="showPosition"
+            >Y坐标：
+            <p>{{ Math.floor(box.box.position.y) }}</p></span
+          >
+          <br />
+          <span v-if="showVelocity"
+            >X方向速率：
+            <p>{{ Number(box.box.velocity.x.toFixed(2)) }}</p>
+          </span>
+          <span v-if="showVelocity"
+            >Y方向速率：
+            <p>{{ Number(box.box.velocity.y.toFixed(2)) }}</p>
+          </span>
+          <br />
+
+          <span v-if="showVelocity"
+            >总速率：
+            <p>{{ Math.floor(Math.sqrt(box.box.velocity.x ** 2 + box.box.velocity.y ** 2)) }}</p>
+          </span>
+        </li>
+      </ul>
+    </div>
+    <div class="text" :class="labStore.isTextOpen ? 'active' : ''">
+      <span>$$ m_1 v_{01} + m_2 v_{02} = m_1 v_1 + m_2 v_2 $$</span>
+      <span>
+        如果物体受到外力的合力为零，则系统内各物体动量的向量和保持不变，系统质心维持原本的运动状态
+      </span>
     </div>
   </div>
 </template>
@@ -212,6 +265,7 @@ onMounted(() => {
   border-radius: 20px;
   transition: 0.5s;
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 10;
 }
 .parameterBox.active {
   right: 0;
@@ -319,12 +373,6 @@ onMounted(() => {
   transform: scale(1.05);
   background: rgba(0, 0, 0, 0.1);
 }
-.positionShow.openModel {
-  height: 188px;
-}
-.speedShow.openModel {
-  height: 340px;
-}
 
 .switch-item {
   display: flex;
@@ -356,5 +404,53 @@ onMounted(() => {
 .value {
   font-family: monospace;
   color: #409eff;
+}
+.paramLists {
+  position: absolute;
+  top: 0;
+  right: 0;
+  max-height: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+}
+.paramLists ul {
+  display: flex;
+  flex-direction: column;
+}
+.paramLists li {
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+  margin: 10px 0;
+}
+.paramLists li span {
+  transition: 0.5s;
+  cursor: default;
+  padding: 0 5px;
+}
+.paramLists li span:hover {
+  font-size: 20px;
+}
+.text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-left: 75px;
+  max-width: 500px;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: #fff;
+  transition: 0.5s;
+  cursor: default;
+  transform: translateY(-100%);
+}
+.text.active {
+  transform: translateY(0);
 }
 </style>
