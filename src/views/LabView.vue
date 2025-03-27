@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/require-v-for-key -->
 <script setup lang="ts">
 import Matter from 'matter-js'
 import { ref, onMounted, watch, reactive, onUnmounted, nextTick } from 'vue'
@@ -12,8 +11,18 @@ const showVelocity = ref(true)
 const frictionAir = ref(0)
 const gravity = ref(1)
 const friction = ref(0)
+const text = ref('')
+const formula = ref('')
 
 // 触发 MathJax 渲染
+// 添加 MathJax 类型声明
+declare global {
+  interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    MathJax: any
+  }
+}
+
 const renderMath = () => {
   if (!window.MathJax) {
     window.MathJax = {
@@ -30,7 +39,7 @@ const renderMath = () => {
 }
 
 interface Box {
-  box: Matter.Body // 可以替换为更具体的类型
+  box: Matter.Body
   name: string
 }
 const boxList = reactive<Box[]>([])
@@ -136,6 +145,9 @@ onMounted(() => {
     () => labStore.startLab,
     () => resetExperiment()
   )
+  text.value =
+    '如果物体受到外力的合力为零，则系统内各物体动量的向量和保持不变，系统质心维持原本的运动状态'
+  formula.value = '$$ m_1 v_{01} + m_2 v_{02} = m_1 v_1 + m_2 v_2 $$'
   boxList.push({ box: boxA, name: 'A' }, { box: boxB, name: 'B' })
   // 添加实时更新函数
   function updateBoxData() {
@@ -229,9 +241,9 @@ onMounted(() => {
       </ul>
     </div>
     <div class="text" :class="labStore.isTextOpen ? 'active' : ''">
-      <span>$$ m_1 v_{01} + m_2 v_{02} = m_1 v_1 + m_2 v_2 $$</span>
+      <span>{{ formula }}</span>
       <span>
-        如果物体受到外力的合力为零，则系统内各物体动量的向量和保持不变，系统质心维持原本的运动状态
+        {{ text }}
       </span>
     </div>
   </div>
@@ -437,7 +449,7 @@ onMounted(() => {
   position: absolute;
   top: 0;
   left: 0;
-  margin-left: 75px;
+  margin-left: 40px;
   max-width: 500px;
   background: rgba(0, 0, 0, 0.1);
   z-index: 10;
@@ -452,5 +464,12 @@ onMounted(() => {
 }
 .text.active {
   transform: translateY(0);
+}
+.text span {
+  transition: 0.5s;
+  cursor: default;
+}
+.text span:hover {
+  transform: scale(1.14);
 }
 </style>

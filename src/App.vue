@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import Banner from './components/Banner.vue'
+import BannerComponent from './components/BannerComponent.vue'
 import SideBar from './components/SideBar.vue'
-import Loading from './components/Loading.vue'
+import LoadingComponent from './components/LoadingComponent.vue'
 </script>
 
 <template>
-  <Loading />
+  <LoadingComponent />
   <SideBar />
-  <Banner />
+  <BannerComponent />
 </template>
 
 <style scoped></style>
