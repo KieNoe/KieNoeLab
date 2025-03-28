@@ -14,7 +14,6 @@ const friction = ref(0)
 const text = ref('')
 const formula = ref('')
 
-// 触发 MathJax 渲染
 // 添加 MathJax 类型声明
 declare global {
   interface Window {
@@ -51,7 +50,7 @@ const labList = reactive([
   {
     name: '动量守恒定律',
     description:
-      '如果物体受到外力的合力为零，则系统内各物体动量的向量和保持不变，系统质心维持原本的运动状态',
+      '如果物体受到外力的合力为零，则系统内各物体动量的向量和保持不变，系统质心维持其原本的运动状态',
     formula: '$$ m_1 v_{01} + m_2 v_{02} = m_1 v_1 + m_2 v_2 $$',
     object: [
       {
