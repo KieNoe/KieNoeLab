@@ -12,8 +12,18 @@ const showVelocity = ref(true)
 const frictionAir = ref(0)
 const gravity = ref(1)
 const friction = ref(0)
+const text = ref('')
+const formula = ref('')
 
 // 触发 MathJax 渲染
+// 添加 MathJax 类型声明
+declare global {
+  interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    MathJax: any
+  }
+}
+
 const renderMath = () => {
   if (!window.MathJax) {
     window.MathJax = {
@@ -30,46 +40,135 @@ const renderMath = () => {
 }
 
 interface Box {
-  box: Matter.Body // 可以替换为更具体的类型
+  box: Matter.Body
   name: string
 }
 const boxList = reactive<Box[]>([])
 let animationFrameId: number | null = null
-onMounted(() => {
+let engine: Matter.Engine // 添加引擎变量以便全局访问
+let render: Matter.Render // 添加渲染器变量以便全局访问
+
+const labList = reactive([
+  {
+    name: '动量守恒定律',
+    description: '如果物体受到外力的合力为零，则系统内各物体动量的向量和保持不变，系统质心维持原本的运动状态',
+    formula: '$$ m_1 v_{01} + m_2 v_{02} = m_1 v_1 + m_2 v_2 $$',
+    object: [
+      {
+        name: 'boxA',
+        textContent: 'A',
+        position: {
+          x: 400,
+          y: 200
+        },
+        velocity: {
+          x: 0,
+          y: 0
+        },
+        width: 80,
+        height: 80,
+        isStatic: false
+      },
+      {
+        name: 'boxB',
+        textContent: 'B',
+        position: {
+          x: 450,
+          y: 50
+        },
+        velocity: {
+          x: 0,
+          y: 0
+        },
+        width: 80,
+        height: 80,
+        isStatic: false
+      }
+    ]
+  }
+])
+const objects = reactive<Matter.Body[]>([]) // 明确类型为 Matter.Body 数组
+const selectIndex = ref(0)
+
+// 设置当前实验的文本和公式
+const setCurrentLabInfo = () => {
+  const currentLab = labList[selectIndex.value]
+  text.value = currentLab.description || ''
+  formula.value = currentLab.formula || ''
   nextTick(() => renderMath())
+}
+
+// 监听物理参数变化
+watch(frictionAir, (newValue) => {
+  objects.forEach(body => {
+    body.frictionAir = newValue
+  })
+})
+
+watch(friction, (newValue) => {
+  objects.forEach(body => {
+    body.friction = newValue
+  })
+})
+
+watch(gravity, (newValue) => {
+  if (engine) {
+    engine.world.gravity.y = newValue
+  }
+})
+
+onMounted(() => {
+  // 设置当前实验信息
+  setCurrentLabInfo()
+  
   const { width, height } = containerRef.value!.getBoundingClientRect()
   const Engine = Matter.Engine
   const Render = Matter.Render
   const Bodies = Matter.Bodies
   const Composite = Matter.Composite
   const Runner = Matter.Runner
-  // 3. 创建引擎
-  const engine = Engine.create()
+  
+  // 创建引擎
+  engine = Engine.create()
   engine.world.gravity.y = gravity.value
 
-  // 4. 创建渲染器，并将引擎连接到画布上
-  const render = Render.create({
-    element: containerRef.value || undefined, // 使用ref获取DOM元素，处理null值
-    engine: engine, // 绑定引擎
+  // 创建渲染器，并将引擎连接到画布上
+  render = Render.create({
+    element: containerRef.value || undefined,
+    engine: engine,
     options: {
       width: Number(width),
       height: Number(height),
-      wireframes: false // 关闭线框模式
+      wireframes: false
     }
   })
-  // 5-1. 创建两个正方形
-  const boxA = Bodies.rectangle(400, 200, 80, 80, {
-    frictionAir: frictionAir.value,
-    friction: friction.value
-  })
-  const boxB = Bodies.rectangle(450, 50, 80, 80, {
-    frictionAir: frictionAir.value,
-    friction: friction.value
+  
+  // 创建物体函数
+  function createBox(name: string, x: number, y: number, width: number, height: number, isStatic: boolean = false) {
+    const box = Bodies.rectangle(x, y, width, height, {
+      frictionAir: frictionAir.value,
+      friction: friction.value,
+      isStatic: isStatic
+    })
+    objects.push(box)
+    boxList.push({ box, name }) // 同时添加到 boxList 以保持一致性
+    return box
+  }
+  
+  // 创建实验物体
+  labList[selectIndex.value].object.forEach((item) => {
+    createBox(
+      item.name, 
+      item.position.x, 
+      item.position.y, 
+      item.width, 
+      item.height, 
+      item.isStatic
+    )
   })
 
-  // 5-2. 创建地面，将isStatic设为true，表示物体静止
-  // 创建四个边界（地面、左墙、右墙、顶部）
-  const thickness = 20 // 墙的厚度
+  // 创建边界
+  const thickness = 20
   const ground = Bodies.rectangle(width / 2, height + thickness / 2, width, thickness, {
     isStatic: true,
     friction: friction.value
@@ -86,74 +185,95 @@ onMounted(() => {
     isStatic: true,
     friction: friction.value
   })
+  
   // 创建鼠标实例
   const mouse = Matter.Mouse.create(render.canvas)
-
-  // 给鼠标添加约束·
   const mouseConstraint = Matter.MouseConstraint.create(engine, {
     mouse: mouse,
     constraint: {
       stiffness: 0.2,
       render: {
-        visible: false // 默认为 true，会显示鼠标拖拽轨迹
+        visible: false
       }
     }
   })
 
-  // 6. 将所有物体添加到世界中
-  Composite.add(engine.world, [boxA, boxB, ground, ceiling, leftWall, rightWall, mouseConstraint])
+  // 将所有物体添加到世界中
+  Composite.add(engine.world, [...objects, ground, ceiling, leftWall, rightWall, mouseConstraint])
 
-  // 7. 执行渲染操作
+  // 执行渲染操作
   Render.run(render)
 
-  // 8. 创建运行方法
+  // 创建运行方法
   const runner = Runner.create()
 
-  // 9. 运行渲染器
+  // 运行渲染器
   setTimeout(() => {
     Runner.run(runner, engine)
   }, 500)
 
-  // 监听 `afterRender` 事件，在画布上绘制 "A"
+  // 监听 `afterRender` 事件，在画布上绘制文本
   Matter.Events.on(render, 'afterRender', () => {
     const ctx = render.context
     ctx.fillStyle = 'black'
     ctx.font = '30px Arial'
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
-    ctx.fillText('A', boxA.position.x, boxA.position.y)
-    ctx.fillText('B', boxB.position.x, boxB.position.y)
+    
+    labList[selectIndex.value].object.forEach((item, index) => {
+      if (index < objects.length) {
+        ctx.fillText(item.textContent, objects[index].position.x, objects[index].position.y)
+      }
+    })
   })
+  
   // 重置实验
   const resetExperiment = () => {
-    Matter.Body.setPosition(boxA, { x: 400, y: 200 }) // 复位 boxA
-    Matter.Body.setVelocity(boxA, { x: 0, y: 0 }) // 清除速度
-
-    Matter.Body.setPosition(boxB, { x: 450, y: 50 }) // 复位 boxB
-    Matter.Body.setVelocity(boxB, { x: 0, y: 0 }) // 清除速度
+    labList[selectIndex.value].object.forEach((item, index) => {
+      if (index < objects.length) {
+        Matter.Body.setPosition(objects[index], { x: item.position.x, y: item.position.y })
+        Matter.Body.setVelocity(objects[index], { x: 0, y: 0 })
+      }
+    })
   }
+  
   watch(
     () => labStore.startLab,
     () => resetExperiment()
   )
-  boxList.push({ box: boxA, name: 'A' }, { box: boxB, name: 'B' })
+
   // 添加实时更新函数
   function updateBoxData() {
-    boxList.forEach((item) => {
-      // 强制触发响应式更新
-      item.box = { ...item.box }
+    // 更新 boxList 以保持与 objects 同步
+    objects.forEach((body, index) => {
+      if (index < boxList.length) {
+        boxList[index].box = { ...body }
+      }
     })
     animationFrameId = requestAnimationFrame(updateBoxData)
   }
+  
   // 开始更新循环
   updateBoxData()
+})
 
-  // 在组件卸载时清理
-  onUnmounted(() => {
-    if (animationFrameId !== null) {
-      cancelAnimationFrame(animationFrameId)
+// 在组件卸载时清理
+onUnmounted(() => {
+  if (animationFrameId !== null) {
+    cancelAnimationFrame(animationFrameId)
+  }
+  
+  // 清理 Matter.js 资源
+  if (render) {
+    Matter.Render.stop(render)
+    if (render.canvas) {
+      render.canvas.remove()
     }
-  })
+  }
+  
+  if (engine) {
+    Matter.Engine.clear(engine)
+  }
 })
 </script>
 <template>
@@ -200,38 +320,40 @@ onMounted(() => {
     </div>
     <div class="paramLists">
       <ul v-if="showPosition || showVelocity">
-        <li v-for="(box, index) in boxList" :key="index">
-          <span>{{ box.name }}:</span>
+        <li v-for="(obj, index) in objects" :key="index" v-show="index < labList[selectIndex].object.length">
+          <span>{{ labList[selectIndex].object[index].name }}:</span>
           <span v-if="showPosition"
             >X坐标：
-            <p>{{ Math.floor(box.box.position.x) }}</p></span
+            <p>{{ Math.floor(obj.position.x) }}</p></span
           >
           <span v-if="showPosition"
             >Y坐标：
-            <p>{{ Math.floor(box.box.position.y) }}</p></span
+            <p>{{ Math.floor(obj.position.y) }}</p></span
           >
           <br />
           <span v-if="showVelocity"
             >X方向速率：
-            <p>{{ Number(box.box.velocity.x.toFixed(2)) }}</p>
+            <p>{{ Number(obj.velocity.x.toFixed(2)) }}</p>
           </span>
           <span v-if="showVelocity"
             >Y方向速率：
-            <p>{{ Number(box.box.velocity.y.toFixed(2)) }}</p>
+            <p>{{ Number(obj.velocity.y.toFixed(2)) }}</p>
           </span>
           <br />
 
           <span v-if="showVelocity"
             >总速率：
-            <p>{{ Math.floor(Math.sqrt(box.box.velocity.x ** 2 + box.box.velocity.y ** 2)) }}</p>
+            <p>
+              {{ Math.floor(Math.sqrt(obj.velocity.x ** 2 + obj.velocity.y ** 2)) }}
+            </p>
           </span>
         </li>
       </ul>
     </div>
     <div class="text" :class="labStore.isTextOpen ? 'active' : ''">
-      <span>$$ m_1 v_{01} + m_2 v_{02} = m_1 v_1 + m_2 v_2 $$</span>
+      <span>{{ formula }}</span>
       <span>
-        如果物体受到外力的合力为零，则系统内各物体动量的向量和保持不变，系统质心维持原本的运动状态
+        {{ text }}
       </span>
     </div>
   </div>
