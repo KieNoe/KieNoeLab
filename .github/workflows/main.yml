@@ -1,0 +1,30 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main  # 触发条件，可以修改为你希望的分支
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ X63iQtSY3?^9/ik }}
+
+    - name: Deploy to Server
+      run: |
+        ssh -o StrictHostKeyChecking=no user@120.26.253.113 << 'EOF'
+          cd /www/wwwroot/frontend
+          git pull origin main  # 或者执行其他部署脚本
+          npm install  # 根据需要执行
+          npm run build  # 如果是前端项目
+          rm -rf /www/wwwroot/120.26.253.113*
+          cp -r dist/* /www/wwwroot/120.26.253.113
+          EOF
