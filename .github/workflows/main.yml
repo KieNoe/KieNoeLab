@@ -16,7 +16,7 @@ jobs:
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
-          ssh-private-key: ${{ X63iQtSY3?^9/ik }}
+          ssh-private-key: ${{ YENCsnnjYNByzKYw }}
 
       - name: Deploy to Server
         run: |
