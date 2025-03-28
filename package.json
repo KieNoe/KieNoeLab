@@ -16,6 +16,7 @@
     "@vueuse/core": "^12.8.2",
     "axios": "^1.7.9",
     "element-plus": "^2.9.5",
+    "ionicons": "^7.4.0",
     "mathjax": "^3.2.2",
     "matter-js": "^0.20.0",
     "pinia": "^3.0.1",

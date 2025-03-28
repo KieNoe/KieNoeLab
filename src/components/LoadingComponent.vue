@@ -5,9 +5,11 @@ import { nextTick } from 'vue'
 
 const globalStore = useGlobalStore()
 window.addEventListener('load', () => {
-  setTimeout(() => {
-    document.querySelector('.loading')?.classList.remove('active')
-  }, 1000)
+  if (window.customElements.get('ion-icon')) {
+    setTimeout(() => {
+      document.querySelector('.loading')?.classList.remove('active')
+    }, 1000)
+  }
 })
 watch(
   () => globalStore.pageLoaded,

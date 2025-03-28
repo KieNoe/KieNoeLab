@@ -2,6 +2,4 @@
 <template>
   <div>LandingPage</div>
 </template>
-<style scoped>
-@import '@/assets/public.css';
-</style>
+<style scoped></style>

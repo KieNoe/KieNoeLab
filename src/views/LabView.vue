@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/require-v-for-key -->
 <script setup lang="ts">
 import Matter from 'matter-js'
 import { ref, onMounted, watch, reactive, onUnmounted, nextTick } from 'vue'
@@ -15,7 +14,6 @@ const friction = ref(0)
 const text = ref('')
 const formula = ref('')
 
-// 触发 MathJax 渲染
 // 添加 MathJax 类型声明
 declare global {
   interface Window {
@@ -51,7 +49,8 @@ let render: Matter.Render // 添加渲染器变量以便全局访问
 const labList = reactive([
   {
     name: '动量守恒定律',
-    description: '如果物体受到外力的合力为零，则系统内各物体动量的向量和保持不变，系统质心维持原本的运动状态',
+    description:
+      '如果物体受到外力的合力为零，则系统内各物体动量的向量和保持不变，系统质心维持其原本的运动状态',
     formula: '$$ m_1 v_{01} + m_2 v_{02} = m_1 v_1 + m_2 v_2 $$',
     object: [
       {
@@ -100,13 +99,13 @@ const setCurrentLabInfo = () => {
 
 // 监听物理参数变化
 watch(frictionAir, (newValue) => {
-  objects.forEach(body => {
+  objects.forEach((body) => {
     body.frictionAir = newValue
   })
 })
 
 watch(friction, (newValue) => {
-  objects.forEach(body => {
+  objects.forEach((body) => {
     body.friction = newValue
   })
 })
@@ -120,14 +119,14 @@ watch(gravity, (newValue) => {
 onMounted(() => {
   // 设置当前实验信息
   setCurrentLabInfo()
-  
+
   const { width, height } = containerRef.value!.getBoundingClientRect()
   const Engine = Matter.Engine
   const Render = Matter.Render
   const Bodies = Matter.Bodies
   const Composite = Matter.Composite
   const Runner = Matter.Runner
-  
+
   // 创建引擎
   engine = Engine.create()
   engine.world.gravity.y = gravity.value
@@ -142,9 +141,16 @@ onMounted(() => {
       wireframes: false
     }
   })
-  
+
   // 创建物体函数
-  function createBox(name: string, x: number, y: number, width: number, height: number, isStatic: boolean = false) {
+  function createBox(
+    name: string,
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    isStatic: boolean = false
+  ) {
     const box = Bodies.rectangle(x, y, width, height, {
       frictionAir: frictionAir.value,
       friction: friction.value,
@@ -154,17 +160,10 @@ onMounted(() => {
     boxList.push({ box, name }) // 同时添加到 boxList 以保持一致性
     return box
   }
-  
+
   // 创建实验物体
   labList[selectIndex.value].object.forEach((item) => {
-    createBox(
-      item.name, 
-      item.position.x, 
-      item.position.y, 
-      item.width, 
-      item.height, 
-      item.isStatic
-    )
+    createBox(item.name, item.position.x, item.position.y, item.width, item.height, item.isStatic)
   })
 
   // 创建边界
@@ -185,7 +184,7 @@ onMounted(() => {
     isStatic: true,
     friction: friction.value
   })
-  
+
   // 创建鼠标实例
   const mouse = Matter.Mouse.create(render.canvas)
   const mouseConstraint = Matter.MouseConstraint.create(engine, {
@@ -219,14 +218,14 @@ onMounted(() => {
     ctx.font = '30px Arial'
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
-    
+
     labList[selectIndex.value].object.forEach((item, index) => {
       if (index < objects.length) {
         ctx.fillText(item.textContent, objects[index].position.x, objects[index].position.y)
       }
     })
   })
-  
+
   // 重置实验
   const resetExperiment = () => {
     labList[selectIndex.value].object.forEach((item, index) => {
@@ -236,7 +235,7 @@ onMounted(() => {
       }
     })
   }
-  
+
   watch(
     () => labStore.startLab,
     () => resetExperiment()
@@ -252,7 +251,7 @@ onMounted(() => {
     })
     animationFrameId = requestAnimationFrame(updateBoxData)
   }
-  
+
   // 开始更新循环
   updateBoxData()
 })
@@ -262,7 +261,7 @@ onUnmounted(() => {
   if (animationFrameId !== null) {
     cancelAnimationFrame(animationFrameId)
   }
-  
+
   // 清理 Matter.js 资源
   if (render) {
     Matter.Render.stop(render)
@@ -270,7 +269,7 @@ onUnmounted(() => {
       render.canvas.remove()
     }
   }
-  
+
   if (engine) {
     Matter.Engine.clear(engine)
   }
@@ -320,8 +319,12 @@ onUnmounted(() => {
     </div>
     <div class="paramLists">
       <ul v-if="showPosition || showVelocity">
-        <li v-for="(obj, index) in objects" :key="index" v-show="index < labList[selectIndex].object.length">
-          <span>{{ labList[selectIndex].object[index].name }}:</span>
+        <li
+          v-for="(obj, index) in objects"
+          :key="index"
+          v-show="index < labList[selectIndex].object.length"
+        >
+          <span>{{ labList[selectIndex].object[index].textContent }}:</span>
           <span v-if="showPosition"
             >X坐标：
             <p>{{ Math.floor(obj.position.x) }}</p></span
@@ -559,7 +562,7 @@ onUnmounted(() => {
   position: absolute;
   top: 0;
   left: 0;
-  margin-left: 75px;
+  margin-left: 40px;
   max-width: 500px;
   background: rgba(0, 0, 0, 0.1);
   z-index: 10;
@@ -574,5 +577,12 @@ onUnmounted(() => {
 }
 .text.active {
   transform: translateY(0);
+}
+.text span {
+  transition: 0.5s;
+  cursor: default;
+}
+.text span:hover {
+  transform: scale(1.14);
 }
 </style>
