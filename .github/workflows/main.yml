@@ -14,14 +14,14 @@ jobs:
         uses: actions/checkout@v3
 
      - name: SSH into Server with Password
-  run: |
-    sudo apt-get install -y expect
-    expect -c "
-    spawn ssh user@120.26.253.113
-    expect \"password:\"
-    send \"srMSdz1Pc6K6YbzQ\r\"
-    interact
-    "
+         run: |
+         sudo apt-get install -y expect
+         expect -c "
+         spawn ssh user@120.26.253.113
+         expect \"password:\"
+         send \"${{ secrets.SSH_PASSWORD }}\r\"
+         interact
+         "
 
       - name: Deploy to Server
         run: |
