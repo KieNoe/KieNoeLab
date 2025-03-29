@@ -3,7 +3,7 @@ name: Deploy to Server
 on:
   push:
     branches:
-      - main # 触发条件，可以修改为你希望的分支
+      - main # 触发部署的分支
 
 jobs:
   deploy:
@@ -16,15 +16,18 @@ jobs:
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
-          ssh-private-key: ${{ SSH_PRIVATE_KEY }}
+          ssh-private-key: ${{ secrets.SERVER_SSH_KEY }}
 
       - name: Deploy to Server
+        env:
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_IP: ${{ secrets.SERVER_IP }}
         run: |
-          ssh -o StrictHostKeyChecking=no KieNoe@120.26.253.113 << 'EOF'
+          ssh -o StrictHostKeyChecking=no "$SERVER_USER@$SERVER_IP" << 'EOF'
             cd /www/wwwroot/frontend
-            git pull origin main  # 或者执行其他部署脚本
-            npm install  # 根据需要执行
-            npm run build  # 如果是前端项目
-            rm -rf /www/wwwroot/120.26.253.113*
-            cp -r dist/* /www/wwwroot/120.26.253.113
-            EOF
+            git pull origin main  # 拉取最新代码
+            npm install  # 安装依赖
+            npm run build  # 构建项目
+            rm -rf /www/wwwroot/www.kienoelab.cn/*
+            cp -r dist/* /www/wwwroot/www.kienoelab.cn/
+          EOF
