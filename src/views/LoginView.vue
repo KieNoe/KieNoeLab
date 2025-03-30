@@ -2,6 +2,8 @@
 import { useUserStore } from '@/stores/userStore'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import request from '@/utils/request'
+import { ElMessage } from 'element-plus'
 
 // 获取用户状态管理实例
 const userStore = useUserStore()
@@ -25,6 +27,41 @@ const confirmPassword = ref('') // 确认密码
 const loginId = ref('') // 登录ID（邮箱）
 const loginPassword = ref('') // 登录密码
 const emailRegister = ref('') // 邮箱验证码
+
+//设置请求方法
+const getRegisterVerificationCode = request.Post(`/api/users/verification-code`, {
+  email: email.value,
+  type: 'register'
+})
+const verifyRegisterEmailCode = request.Post(`/api/users/verify-code`, {
+  email: email.value,
+  code: emailRegister.value,
+  type: 'register'
+})
+const register = request.Post(`/api/users/register`, {
+  username: username.value,
+  email: email.value,
+  password: password.value,
+  code: emailRegister.value
+})
+const login = request.Post(`/api/users/login`, {
+  email: loginId.value,
+  password: loginPassword.value
+})
+const getResetPasswordVerificationCode = request.Post(`/api/users/verification-code`, {
+  email: email.value,
+  type: 'password_reset'
+})
+const verifyResetPasswordEmailCode = request.Post(`/api/users/verify-code`, {
+  email: email.value,
+  code: emailRegister.value,
+  type: 'password_reset'
+})
+const resetUserPassword = request.Post(`/api/users/reset-password`, {
+  email: email.value,
+  newPassword: password.value,
+  code: emailRegister.value
+})
 
 // 错误提示信息存储
 const usernameError = ref('') // 用户名错误提示
@@ -62,7 +99,6 @@ const validateUsername = () => {
   } else if (!usernameRegex.test(username.value)) {
     usernameError.value = '用户名长度为4-20字符，且只能包含字母、数字、下划线、短横线'
     getShake()
-  } else if (false) {
   } else {
     usernameError.value = ''
   }
@@ -137,20 +173,26 @@ const emailConfirmError = () => {
  * 验证所有字段，全部通过后标记注册成功
  */
 const submitForm = () => {
-  getShake()
   validateUsername()
   validateEmail()
   validatePassword()
   validateConfirmPassword()
-
-  if (
-    !usernameError.value &&
-    !emailError.value &&
-    !passwordError.value &&
-    !confirmPasswordError.value
-  ) {
-    isRegistrationSuccessful.value = true
-  }
+  getRegisterVerificationCode
+    .send()
+    .then(() => {
+      if (
+        !usernameError.value &&
+        !emailError.value &&
+        !passwordError.value &&
+        !confirmPasswordError.value
+      ) {
+        isRegistrationSuccessful.value = true
+      }
+    })
+    .catch((error) => {
+      getShake()
+      ElMessage.error(error)
+    })
 }
 
 /**
@@ -161,30 +203,36 @@ const loginForm = () => {
   if (!loginId.value) {
     loginIdError.value = '邮箱不能为空'
     getShake()
-  } else if (false) {
   } else {
     loginIdError.value = ''
   }
   if (!loginPassword.value) {
     loginPasswordError.value = '密码不能为空'
     getShake()
-  } else if (false) {
   } else {
     loginPasswordError.value = ''
   }
   if (!loginIdError.value && !loginPasswordError.value) {
-    isResetPasswordModalOpen.value = false
-    isVerificationSuccessful.value = true
-    userInfo = {
-      name: 'KieNoe',
-      email: loginId.value,
-      password: loginPassword.value,
-      id: '114514'
-    }
-    setTimeout(() => {
-      userStore.login(userInfo)
-      router.push('/me')
-    }, 2000)
+    login
+      .send()
+      .then((res) => {
+        isResetPasswordModalOpen.value = false
+        isVerificationSuccessful.value = true
+        userInfo = {
+          name: (res as { user: { name: string } }).user.name,
+          email: loginId.value,
+          password: loginPassword.value,
+          id: (res as { user: { id: string } }).user.id
+        }
+        localStorage.setItem('token', (res as { token: string }).token)
+        setTimeout(() => {
+          userStore.login(userInfo)
+          router.push('/me')
+        }, 2000)
+      })
+      .catch((error) => {
+        ElMessage.error(error)
+      })
   }
 }
 const loginPasswordInput = ref<HTMLInputElement | null>(null)
@@ -296,20 +344,35 @@ const resendVerificationCode = () => {
  * 验证成功后进行登录并跳转
  */
 const verifyEmailCode = () => {
-  getShake()
   if (emailConfirmError()) {
-    isVerificationSuccessful.value = true
-    userInfo = {
-      name: username.value,
-      email: email.value,
-      password: password.value,
-      id: '114514'
-    }
-    setTimeout(() => {
-      userStore.login(userInfo)
-      router.push('/me')
-    }, 2000)
+    verifyRegisterEmailCode
+      .send()
+      .then(() => {
+        register
+          .send()
+          .then((res) => {
+            isVerificationSuccessful.value = true
+            localStorage.setItem('token', (res as { token: string }).token)
+            userInfo = {
+              name: username.value,
+              email: email.value,
+              password: password.value,
+              id: (res as { user: { id: string } }).user.id
+            }
+            setTimeout(() => {
+              userStore.login(userInfo)
+              router.push('/me')
+            }, 2000)
+          })
+          .catch((error) => {
+            ElMessage.error(error)
+          })
+      })
+      .catch((error) => {
+        ElMessage.error(error)
+      })
   } else {
+    getShake()
     isVerificationSuccessful.value = false
   }
 }
@@ -334,7 +397,6 @@ const toggleAuthView = () => {
  * 验证邮箱后打开验证模态框
  */
 const toggleForgotPassword = () => {
-  getShake()
   if (!loginId.value) {
     loginIdError.value = '请输入邮箱'
     getShake()
@@ -342,8 +404,15 @@ const toggleForgotPassword = () => {
     loginIdError.value = '请输入有效的邮箱地址'
     getShake()
   } else {
-    loginIdError.value = ''
-    isVerificationModalOpen.value = true
+    getResetPasswordVerificationCode
+      .send()
+      .then(() => {
+        loginIdError.value = ''
+        isVerificationModalOpen.value = true
+      })
+      .catch((error) => {
+        ElMessage.error(error)
+      })
   }
 }
 
@@ -352,10 +421,18 @@ const toggleForgotPassword = () => {
  * 验证成功后打开重置密码模态框
  */
 const confirmEmailVerification = () => {
-  getShake()
   if (emailConfirmError()) {
-    isVerificationModalOpen.value = false
-    isResetPasswordModalOpen.value = true
+    verifyResetPasswordEmailCode
+      .send()
+      .then(() => {
+        isVerificationModalOpen.value = false
+        isResetPasswordModalOpen.value = true
+      })
+      .catch((error) => {
+        ElMessage.error(error)
+      })
+  } else {
+    getShake()
   }
 }
 
@@ -367,18 +444,20 @@ const resetPassword = () => {
   validatePassword()
   validateConfirmPassword()
   if (!passwordError.value && !confirmPasswordError.value) {
-    isResetPasswordModalOpen.value = false
-    isVerificationSuccessful.value = true
-    userInfo = {
-      name: 'KieNoe',
-      email: email.value,
-      password: password.value,
-      id: '114514'
-    }
-    setTimeout(() => {
-      userStore.login(userInfo)
-      router.push('/me')
-    }, 2000)
+    resetUserPassword
+      .send()
+      .then(() => {
+        isResetPasswordModalOpen.value = false
+        isVerificationSuccessful.value = true
+        userInfo.password = password.value
+        setTimeout(() => {
+          userStore.login(userInfo)
+          router.push('/me')
+        }, 2000)
+      })
+      .catch((error) => {
+        ElMessage.error(error)
+      })
   } else {
     getShake()
   }
