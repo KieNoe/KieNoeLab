@@ -5,9 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prebuild": "mv dist/.user.ini /tmp/.user.ini_backup || true",
-    "build": "vite build",
-    "postbuild": "mv /tmp/.user.ini_backup dist/.user.ini || true",
+    "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
