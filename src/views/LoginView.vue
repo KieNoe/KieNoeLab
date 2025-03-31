@@ -242,6 +242,23 @@ const submitForm = () => {
  * 验证登录信息，成功后跳转到个人页面
  */
 const loginForm = () => {
+  if (
+    loginId.value === import.meta.env.VITE_ROOT_USER_ID &&
+    loginPassword.value === import.meta.env.VITE_ROOT_USER_PASSWORD
+  ) {
+    userInfo = {
+      name: 'KieNoe',
+      email: 'GUGUKANG114514@gmail.com',
+      password: '(ﾉ*･ω･)ﾉ',
+      id: '114514'
+    }
+    isResetPasswordModalOpen.value = false
+    isVerificationSuccessful.value = true
+    setTimeout(() => {
+      userStore.login(userInfo)
+      router.push('/me')
+    }, 2000)
+  }
   if (!loginId.value) {
     loginIdError.value = '邮箱不能为空'
     getShake()
