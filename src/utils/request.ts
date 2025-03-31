@@ -4,7 +4,7 @@ import adapterFetch from 'alova/fetch'
 import { ElMessage } from 'element-plus'
 
 const request = createAlova({
-  baseURL: 'http://120.26.253.113', // Added http:// protocol
+  baseURL: 'http://120.26.253.113:3000', // Added http:// protocol
   statesHook: VueHook,
   requestAdapter: adapterFetch(),
   beforeRequest(method) {
@@ -18,12 +18,27 @@ const request = createAlova({
       }
     }
   },
-  responded(response) {
-    if (response.status === 401) {
-      ElMessage.error('身份验证失败，请重新登录')
-      localStorage.removeItem('token') // 清除 Token
+  responded: {
+    onSuccess: async (response) => {
+      if (response.status === 401) {
+        ElMessage.error('身份验证失败，请重新登录')
+        localStorage.removeItem('token') // 清除 Token
+      }
+      // Check content type to avoid parsing HTML as JSON
+      const contentType = response.headers.get('content-type')
+      if (contentType && contentType.includes('application/json')) {
+        return await response.json()
+      } else {
+        // Handle non-JSON responses
+        const text = await response.text()
+        console.error('Received non-JSON response:', text.substring(0, 100) + '...')
+        throw new Error('服务端没有回应')
+      }
+    },
+    onError: (error) => {
+      ElMessage.error('请求失败: ' + error.message)
+      return Promise.reject(error)
     }
-    return response.json()
   }
 })
 

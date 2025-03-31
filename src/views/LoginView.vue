@@ -29,39 +29,74 @@ const loginPassword = ref('') // 登录密码
 const emailRegister = ref('') // 邮箱验证码
 
 //设置请求方法
-const getRegisterVerificationCode = request.Post(`/api/users/verification-code`, {
-  email: email.value,
-  type: 'register'
-})
-const verifyRegisterEmailCode = request.Post(`/api/users/verify-code`, {
-  email: email.value,
-  code: emailRegister.value,
-  type: 'register'
-})
-const register = request.Post(`/api/users/register`, {
-  username: username.value,
-  email: email.value,
-  password: password.value,
-  code: emailRegister.value
-})
-const login = request.Post(`/api/users/login`, {
-  email: loginId.value,
-  password: loginPassword.value
-})
-const getResetPasswordVerificationCode = request.Post(`/api/users/verification-code`, {
-  email: email.value,
-  type: 'password_reset'
-})
-const verifyResetPasswordEmailCode = request.Post(`/api/users/verify-code`, {
-  email: email.value,
-  code: emailRegister.value,
-  type: 'password_reset'
-})
-const resetUserPassword = request.Post(`/api/users/reset-password`, {
-  email: email.value,
-  newPassword: password.value,
-  code: emailRegister.value
-})
+const getRegisterVerificationCode = () => {
+  return request.Post(
+    `/api/users/verification-code`,
+    JSON.stringify({
+      email: email.value,
+      type: 'register'
+    })
+  )
+}
+const verifyRegisterEmailCode = () => {
+  return request.Post(
+    `/api/users/verify-code`,
+    JSON.stringify({
+      email: email.value,
+      code: emailRegister.value,
+      type: 'register'
+    })
+  )
+}
+const register = () => {
+  return request.Post(
+    `/api/users/register`,
+    JSON.stringify({
+      username: username.value,
+      email: email.value,
+      password: password.value,
+      code: emailRegister.value
+    })
+  )
+}
+const login = () => {
+  return request.Post(
+    `/api/users/login`,
+    JSON.stringify({
+      email: loginId.value,
+      password: loginPassword.value
+    })
+  )
+}
+const getResetPasswordVerificationCode = () => {
+  return request.Post(
+    `/api/users/verification-code`,
+    JSON.stringify({
+      email: loginId.value,
+      type: 'password_reset'
+    })
+  )
+}
+const verifyResetPasswordEmailCode = () => {
+  return request.Post(
+    `/api/users/verify-code`,
+    JSON.stringify({
+      email: email.value,
+      code: emailRegister.value,
+      type: 'password_reset'
+    })
+  )
+}
+const resetUserPassword = () => {
+  return request.Post(
+    `/api/users/reset-password`,
+    JSON.stringify({
+      email: email.value,
+      newPassword: password.value,
+      code: emailRegister.value
+    })
+  )
+}
 
 // 错误提示信息存储
 const usernameError = ref('') // 用户名错误提示
@@ -160,7 +195,6 @@ const emailConfirmError = () => {
   if (!emailRegister.value) {
     emailRegisterError.value = '验证码不能为空'
     return false
-  } else if (false) {
   } else {
     emailRegisterError.value = ''
     return true
@@ -177,22 +211,30 @@ const submitForm = () => {
   validateEmail()
   validatePassword()
   validateConfirmPassword()
-  getRegisterVerificationCode
-    .send()
-    .then(() => {
-      if (
-        !usernameError.value &&
-        !emailError.value &&
-        !passwordError.value &&
-        !confirmPasswordError.value
-      ) {
-        isRegistrationSuccessful.value = true
-      }
-    })
-    .catch((error) => {
-      getShake()
-      ElMessage.error(error)
-    })
+  if (
+    !usernameError.value &&
+    !emailError.value &&
+    !passwordError.value &&
+    !confirmPasswordError.value
+  ) {
+    getRegisterVerificationCode()
+      .send()
+      .then((res) => {
+        if (!('error' in (res as { error: string }))) {
+          resendVerificationCode()
+          ElMessage.success((res as { message: string }).message)
+          isRegistrationSuccessful.value = true
+        } else {
+          ElMessage.error(
+            (res as { message: string }).message + ':' + (res as { error: string }).error
+          )
+        }
+      })
+      .catch((error) => {
+        getShake()
+        ElMessage.error(error.message)
+      })
+  }
 }
 
 /**
@@ -213,25 +255,32 @@ const loginForm = () => {
     loginPasswordError.value = ''
   }
   if (!loginIdError.value && !loginPasswordError.value) {
-    login
+    login()
       .send()
       .then((res) => {
-        isResetPasswordModalOpen.value = false
-        isVerificationSuccessful.value = true
-        userInfo = {
-          name: (res as { user: { name: string } }).user.name,
-          email: loginId.value,
-          password: loginPassword.value,
-          id: (res as { user: { id: string } }).user.id
+        if (!('error' in (res as { error: string }))) {
+          ElMessage.success((res as { message: string }).message)
+          isResetPasswordModalOpen.value = false
+          isVerificationSuccessful.value = true
+          userInfo = {
+            name: (res as { user: { name: string } }).user.name,
+            email: loginId.value,
+            password: loginPassword.value,
+            id: (res as { user: { id: string } }).user.id
+          }
+          localStorage.setItem('token', (res as { token: string }).token)
+          setTimeout(() => {
+            userStore.login(userInfo)
+            router.push('/me')
+          }, 2000)
+        } else {
+          ElMessage.error(
+            (res as { message: string }).message + ':' + (res as { error: string }).error
+          )
         }
-        localStorage.setItem('token', (res as { token: string }).token)
-        setTimeout(() => {
-          userStore.login(userInfo)
-          router.push('/me')
-        }, 2000)
       })
       .catch((error) => {
-        ElMessage.error(error)
+        ElMessage.error(error.message)
       })
   }
 }
@@ -239,13 +288,12 @@ const loginPasswordInput = ref<HTMLInputElement | null>(null)
 const emailInput = ref<HTMLInputElement | null>(null)
 const passwordInput = ref<HTMLInputElement | null>(null)
 const confirmPasswordInput = ref<HTMLInputElement | null>(null)
-const confirmPasswordInput1 = ref<HTMLInputElement | null>(null)
+const confirmResetPasswordInput = ref<HTMLInputElement | null>(null)
 
 // 登录表单回车处理
 const handleLoginIdEnter = (e: KeyboardEvent) => {
   if (e.key === 'Enter') {
     e.preventDefault()
-    console.log(loginPasswordInput.value)
     loginPasswordInput.value?.focus()
   }
 }
@@ -281,7 +329,7 @@ const handlePasswordEnter = (e: KeyboardEvent) => {
 const handlePasswordEnter1 = (e: KeyboardEvent) => {
   if (e.key === 'Enter') {
     e.preventDefault()
-    confirmPasswordInput1.value?.focus()
+    confirmResetPasswordInput.value?.focus()
   }
 }
 
@@ -345,31 +393,45 @@ const resendVerificationCode = () => {
  */
 const verifyEmailCode = () => {
   if (emailConfirmError()) {
-    verifyRegisterEmailCode
+    verifyRegisterEmailCode()
       .send()
-      .then(() => {
-        register
-          .send()
-          .then((res) => {
-            isVerificationSuccessful.value = true
-            localStorage.setItem('token', (res as { token: string }).token)
-            userInfo = {
-              name: username.value,
-              email: email.value,
-              password: password.value,
-              id: (res as { user: { id: string } }).user.id
-            }
-            setTimeout(() => {
-              userStore.login(userInfo)
-              router.push('/me')
-            }, 2000)
-          })
-          .catch((error) => {
-            ElMessage.error(error)
-          })
+      .then((res) => {
+        if (!('error' in (res as { error: string }))) {
+          ElMessage.success((res as { message: string }).message)
+          register()
+            .send()
+            .then((res) => {
+              if (!('error' in (res as { error: string }))) {
+                ElMessage.success((res as { message: string }).message)
+                isVerificationSuccessful.value = true
+                localStorage.setItem('token', (res as { token: string }).token)
+                userInfo = {
+                  name: username.value,
+                  email: email.value,
+                  password: password.value,
+                  id: (res as { user: { id: string } }).user.id
+                }
+                setTimeout(() => {
+                  userStore.login(userInfo)
+                  router.push('/me')
+                }, 2000)
+              } else {
+                ElMessage.error(
+                  (res as { message: string }).message + ':' + (res as { error: string }).error
+                )
+              }
+            })
+            .catch((error) => {
+              ElMessage.error(error.message)
+            })
+        } else {
+          ElMessage.error(
+            (res as { message: string }).message + ':' + (res as { error: string }).error
+          )
+        }
       })
       .catch((error) => {
-        ElMessage.error(error)
+        ElMessage.error(error.message)
       })
   } else {
     getShake()
@@ -404,14 +466,22 @@ const toggleForgotPassword = () => {
     loginIdError.value = '请输入有效的邮箱地址'
     getShake()
   } else {
-    getResetPasswordVerificationCode
+    getResetPasswordVerificationCode()
       .send()
-      .then(() => {
-        loginIdError.value = ''
-        isVerificationModalOpen.value = true
+      .then((res) => {
+        if (!('error' in (res as { error: string }))) {
+          resendVerificationCode()
+          ElMessage.success((res as { message: string }).message)
+          loginIdError.value = ''
+          isVerificationModalOpen.value = true
+        } else {
+          ElMessage.error(
+            (res as { message: string }).message + ':' + (res as { error: string }).error
+          )
+        }
       })
       .catch((error) => {
-        ElMessage.error(error)
+        ElMessage.error(error.message)
       })
   }
 }
@@ -422,14 +492,21 @@ const toggleForgotPassword = () => {
  */
 const confirmEmailVerification = () => {
   if (emailConfirmError()) {
-    verifyResetPasswordEmailCode
+    verifyResetPasswordEmailCode()
       .send()
-      .then(() => {
-        isVerificationModalOpen.value = false
-        isResetPasswordModalOpen.value = true
+      .then((res) => {
+        if (!('error' in (res as { error: string }))) {
+          ElMessage.success((res as { message: string }).message)
+          isVerificationModalOpen.value = false
+          isResetPasswordModalOpen.value = true
+        } else {
+          ElMessage.error(
+            (res as { message: string }).message + ':' + (res as { error: string }).error
+          )
+        }
       })
       .catch((error) => {
-        ElMessage.error(error)
+        ElMessage.error(error.message)
       })
   } else {
     getShake()
@@ -444,19 +521,26 @@ const resetPassword = () => {
   validatePassword()
   validateConfirmPassword()
   if (!passwordError.value && !confirmPasswordError.value) {
-    resetUserPassword
+    resetUserPassword()
       .send()
-      .then(() => {
-        isResetPasswordModalOpen.value = false
-        isVerificationSuccessful.value = true
-        userInfo.password = password.value
-        setTimeout(() => {
-          userStore.login(userInfo)
-          router.push('/me')
-        }, 2000)
+      .then((res) => {
+        if (!('error' in (res as { error: string }))) {
+          ElMessage.success((res as { message: string }).message)
+          isResetPasswordModalOpen.value = false
+          isVerificationSuccessful.value = true
+          userInfo.password = password.value
+          setTimeout(() => {
+            userStore.login(userInfo)
+            router.push('/me')
+          }, 2000)
+        } else {
+          ElMessage.error(
+            (res as { message: string }).message + ':' + (res as { error: string }).error
+          )
+        }
       })
       .catch((error) => {
-        ElMessage.error(error)
+        ElMessage.error(error.message)
       })
   } else {
     getShake()
@@ -571,7 +655,7 @@ function getShake() {
                   id="confirmPassword"
                   :type="showPassword ? 'text' : 'password'"
                   placeholder="确认密码"
-                  ref="confirmPasswordInput1"
+                  ref="confirmResetPasswordInput"
                   @keydown.enter.prevent="handleConfirmPasswordEnter1"
                 />
                 <span @click="togglePassword">
