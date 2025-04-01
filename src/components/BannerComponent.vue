@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+function toggleTheme() {}
 </script>
 <template>
   <div class="banner">
@@ -9,8 +10,11 @@ import { RouterLink, RouterView } from 'vue-router'
       </div>
     </div>
     <div class="right">
-      <div class="search">
-        <ion-icon name="search-outline"></ion-icon>
+      <div class="language">
+        <ion-icon name="language-outline"></ion-icon>
+      </div>
+      <div class="theme" @click="toggleTheme">
+        <img src="/svg/sunny.svg" />
       </div>
       <div class="notification">
         <RouterLink to="/notification" class="router-link"
@@ -69,7 +73,7 @@ import { RouterLink, RouterView } from 'vue-router'
 }
 .banner .right {
   height: 50px;
-  width: 170px;
+  width: 220px;
   display: flex;
   padding: 0 20px 0 0;
 }
@@ -121,19 +125,19 @@ import { RouterLink, RouterView } from 'vue-router'
   color: #222;
   font-size: 40px;
 }
-.banner .right .search {
+.banner .right .language {
   flex: 1;
   display: flex;
   position: relative;
   justify-content: center;
   align-items: center;
 }
-.banner .right .search ion-icon {
+.banner .right .language ion-icon {
   color: #222;
   font-size: 35px;
   padding: 0 0 5px 0;
 }
-.banner .right .search::before {
+.banner .right .language::before {
   content: '';
   position: absolute;
   width: 100%;
@@ -143,7 +147,32 @@ import { RouterLink, RouterView } from 'vue-router'
   transition: 0.5s;
   opacity: 0;
 }
-.banner .right .search:hover::before {
+.banner .right .language:hover::before {
+  opacity: 1;
+}
+.banner .right .theme {
+  flex: 1;
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+}
+.banner .right .theme img {
+  color: #222;
+  width: 35px;
+  height: 35px;
+}
+.banner .right .theme::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 50%;
+  transition: 0.5s;
+  opacity: 0;
+}
+.banner .right .theme:hover::before {
   opacity: 1;
 }
 .main {

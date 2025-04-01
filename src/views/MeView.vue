@@ -11,6 +11,7 @@ const userStore = useUserStore()
 // 默认头像路径
 const userAvatar = ref('/images/LOGO.png')
 
+const avatar = ref<HTMLImageElement | null>(null)
 const toggleLogin = () => {
   router.push('/login')
   userStore.logout()
@@ -18,6 +19,11 @@ const toggleLogin = () => {
 onMounted(() => {
   const savedAvatar = localStorage.getItem('userAvatar')
   if (savedAvatar) userAvatar.value = savedAvatar
+  if (avatar.value) {
+    avatar.value.addEventListener('click', () => {
+      router.push('/setting')
+    })
+  }
 })
 </script>
 
@@ -26,7 +32,7 @@ onMounted(() => {
     <!-- 个人信息区域 -->
     <div class="profile-header">
       <div class="avatar-container">
-        <img :src="userAvatar" alt="头像" class="avatar" />
+        <img :src="userAvatar" alt="头像" class="avatar" ref="avatar" />
       </div>
       <div class="user-info">
         <p class="username">

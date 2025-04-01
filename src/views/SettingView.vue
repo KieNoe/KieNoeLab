@@ -121,6 +121,12 @@ const countdown = ref(0)
 const isCountingDown = ref(false)
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
 
+const savaSuccess = () => {
+  ElMessage({
+    message: '保存成功！',
+    type: 'success'
+  })
+}
 // 发送验证码
 const sendVerificationCode = () => {
   if (!newEmail.value) {
@@ -432,7 +438,7 @@ onMounted(() => {
               </div>
             </div>
 
-            <button class="save-button">保存设置</button>
+            <button class="save-button" @click="savaSuccess">保存设置</button>
           </div>
         </div>
         <!-- 邮件通知设置卡片内容 -->
@@ -457,7 +463,7 @@ onMounted(() => {
                   <span>不接收推送邮件</span>
                 </label>
               </div>
-              <button class="save-button">保存设置</button>
+              <button class="save-button" @click="savaSuccess">保存设置</button>
             </div>
           </div>
         </div>

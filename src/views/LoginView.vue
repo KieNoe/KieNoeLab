@@ -258,47 +258,48 @@ const loginForm = () => {
       userStore.login(userInfo)
       router.push('/me')
     }, 2000)
-  }
-  if (!loginId.value) {
-    loginIdError.value = '邮箱不能为空'
-    getShake()
   } else {
-    loginIdError.value = ''
-  }
-  if (!loginPassword.value) {
-    loginPasswordError.value = '密码不能为空'
-    getShake()
-  } else {
-    loginPasswordError.value = ''
-  }
-  if (!loginIdError.value && !loginPasswordError.value) {
-    login()
-      .send()
-      .then((res) => {
-        if (!('error' in (res as { error: string }))) {
-          ElMessage.success((res as { message: string }).message)
-          isResetPasswordModalOpen.value = false
-          isVerificationSuccessful.value = true
-          userInfo = {
-            name: (res as { user: { name: string } }).user.name,
-            email: loginId.value,
-            password: loginPassword.value,
-            id: (res as { user: { id: string } }).user.id
+    if (!loginId.value) {
+      loginIdError.value = '邮箱不能为空'
+      getShake()
+    } else {
+      loginIdError.value = ''
+    }
+    if (!loginPassword.value) {
+      loginPasswordError.value = '密码不能为空'
+      getShake()
+    } else {
+      loginPasswordError.value = ''
+    }
+    if (!loginIdError.value && !loginPasswordError.value) {
+      login()
+        .send()
+        .then((res) => {
+          if (!('error' in (res as { error: string }))) {
+            ElMessage.success((res as { message: string }).message)
+            isResetPasswordModalOpen.value = false
+            isVerificationSuccessful.value = true
+            userInfo = {
+              name: (res as { user: { name: string } }).user.name,
+              email: loginId.value,
+              password: loginPassword.value,
+              id: (res as { user: { id: string } }).user.id
+            }
+            localStorage.setItem('token', (res as { token: string }).token)
+            setTimeout(() => {
+              userStore.login(userInfo)
+              router.push('/me')
+            }, 2000)
+          } else {
+            ElMessage.error(
+              (res as { message: string }).message + ':' + (res as { error: string }).error
+            )
           }
-          localStorage.setItem('token', (res as { token: string }).token)
-          setTimeout(() => {
-            userStore.login(userInfo)
-            router.push('/me')
-          }, 2000)
-        } else {
-          ElMessage.error(
-            (res as { message: string }).message + ':' + (res as { error: string }).error
-          )
-        }
-      })
-      .catch((error) => {
-        ElMessage.error(error.message)
-      })
+        })
+        .catch((error) => {
+          ElMessage.error(error.message)
+        })
+    }
   }
 }
 const loginPasswordInput = ref<HTMLInputElement | null>(null)
