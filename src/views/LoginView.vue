@@ -248,7 +248,7 @@ const loginForm = () => {
   ) {
     userInfo = {
       name: 'KieNoe',
-      email: 'GUGUKANG114514@gmail.com',
+      email: 'ヾ(•ω•`)o',
       password: '(ﾉ*･ω･)ﾉ',
       id: '114514'
     }

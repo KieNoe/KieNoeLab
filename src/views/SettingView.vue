@@ -3,10 +3,39 @@ import { useUserStore } from '@/stores/userStore'
 import { ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
+import request from '@/utils/request'
 
 const router = useRouter()
 const userStore = useUserStore()
 
+const getResetEmailCode = () => {
+  return request.Post(
+    `/api/users/verification-code`,
+    JSON.stringify({
+      email: newEmail.value,
+      type: 'email_change'
+    })
+  )
+}
+const verifyResetEmailCode = () => {
+  return request.Post(
+    `/api/users/verification-code`,
+    JSON.stringify({
+      email: newEmail.value,
+      code: verificationCode.value,
+      type: 'email_change'
+    })
+  )
+}
+const changeEmail = () => {
+  return request.Post(
+    `/api/users/change-email`,
+    JSON.stringify({
+      newEmail: newEmail.value,
+      code: verificationCode.value
+    })
+  )
+}
 // 控制各个管理卡片的显示状态
 const activeCard = ref<string | null>(null)
 
@@ -101,8 +130,17 @@ const sendVerificationCode = () => {
     ElMessage.error('请输入正确的邮箱格式')
     return
   } else {
-    // TODO: 实现发送验证码的API调用
-    ElMessage.success('验证码发送成功')
+    getResetEmailCode()
+      .send()
+      .then((res) => {
+        if (!('error' in (res as { error: string }))) {
+          ElMessage.success('验证码已发送')
+        } else {
+          ElMessage.error(
+            (res as { message: string }).message + ':' + (res as { error: string }).error
+          )
+        }
+      })
   }
   if (isCountingDown.value) return
   isCountingDown.value = true
@@ -123,14 +161,34 @@ const submitNewEmail = () => {
     ElMessage.error('请填写完整信息')
     return
   }
-  // TODO: 实现邮箱修改的API调用
-  ElMessage.success('邮箱修改成功')
-  localStorage.setItem('lastModified', new Date().toLocaleString())
-  userStore.updateEmail(newEmail.value)
-  lastModified = localStorage.getItem('lastModified')
-  newEmail.value = ''
-  verificationCode.value = ''
-  toggleContractCard()
+  verifyResetEmailCode()
+    .send()
+    .then((res) => {
+      if (!('error' in (res as { error: string }))) {
+        ElMessage.success('验证码验证成功')
+        changeEmail()
+          .send()
+          .then((res) => {
+            if (!('error' in (res as { error: string }))) {
+              ElMessage.success('邮箱修改成功')
+              localStorage.setItem('lastModified', new Date().toLocaleString())
+              userStore.updateEmail(newEmail.value)
+              lastModified = localStorage.getItem('lastModified')
+              newEmail.value = ''
+              verificationCode.value = ''
+              toggleContractCard()
+            } else {
+              ElMessage.error(
+                (res as { message: string }).message + ':' + (res as { error: string }).error
+              )
+            }
+          })
+      } else {
+        ElMessage.error(
+          (res as { message: string }).message + ':' + (res as { error: string }).error
+        )
+      }
+    })
 }
 // 页面加载时从 localStorage 读取头像
 onMounted(() => {
