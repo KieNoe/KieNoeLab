@@ -25,9 +25,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <LoadingComponent />
-  <SideBar />
-  <BannerComponent />
+  <div class="content-container">
+    <LoadingComponent />
+    <SideBar />
+    <BannerComponent />
+  </div>
 </template>
 
 <style>
@@ -49,22 +51,5 @@ onMounted(() => {
     transform: scale(10);
     opacity: 0;
   }
-}
-:root {
-  --bg-color: white;
-  --text-color: black;
-}
-
-.dark {
-  --bg-color: #1a202c;
-  --text-color: white;
-}
-
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
 }
 </style>

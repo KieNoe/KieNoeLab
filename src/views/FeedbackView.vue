@@ -94,8 +94,11 @@ onMounted(() => {
 </template>
 
 <style scoped>
+* {
+  color: var(--text-color);
+}
 .feedback-container {
-  background: #fff;
+  background: var(--background-color);
   width: 100%;
   height: 100%;
   display: flex;
@@ -111,15 +114,15 @@ onMounted(() => {
 .feedback-form {
   padding: 2rem;
   margin-left: 30px;
-  background: #fff;
+  background: var(--background-color);
   border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px var(--color-01);
 }
 
 h1 {
   font-size: 2rem;
   margin-bottom: 1.5rem;
-  color: #333;
+  color: var(--text-color);
   transition: 0.5s;
   cursor: default;
 }
@@ -130,11 +133,12 @@ h1:hover {
 textarea {
   width: 100%;
   padding: 1rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--more-color-2);
   border-radius: 4px;
   resize: vertical;
   margin-bottom: 1rem;
   transition: 0.5s;
+  background: var(--background-color);
 }
 textarea:hover {
   font-size: 1.1rem;
@@ -143,7 +147,7 @@ textarea:hover {
 }
 
 .system-info {
-  background: #f5f5f5;
+  background: var(--more-color-1);
   padding: 1rem;
   border-radius: 4px;
   margin-bottom: 1rem;
@@ -153,14 +157,14 @@ textarea:hover {
 }
 .system-info:hover {
   background: #3498db;
-  color: white;
+  color: var(--text-color);
   font-size: 1.1rem;
   transform: scale(1.03);
 }
 
 button {
   background: #3498db;
-  color: white;
+  color: var(--text-color);
   border: none;
   padding: 0.8rem 2rem;
   border-radius: 4px;
@@ -176,7 +180,7 @@ button:hover {
 
 .privacy-notice {
   margin-top: 1rem;
-  color: #666;
+  color: var(--text-color);
   font-size: 0.9rem;
   transition: 0.5s;
   cursor: default;
@@ -191,10 +195,10 @@ button:hover {
 }
 
 .faq-card {
-  background: #fff;
+  background: var(--background-color);
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px var(--color-01);
   margin-bottom: 1rem;
   transition: 0.5s;
 }
@@ -205,7 +209,7 @@ button:hover {
 h2 {
   margin-bottom: 1.5rem;
   width: 120px;
-  color: #333;
+  color: var(--text-color);
   cursor: default;
   transition: 0.5s;
 }
@@ -215,7 +219,7 @@ h2:hover {
 }
 
 h3 {
-  color: #444;
+  color: var(--text-color);
   margin-bottom: 0.5rem;
 }
 </style>

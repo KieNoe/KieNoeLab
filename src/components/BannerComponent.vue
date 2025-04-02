@@ -1,7 +1,24 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-function toggleTheme() {}
+import { onMounted, ref } from 'vue'
+
+const isDark = ref(localStorage.getItem('theme') === 'dark')
+function handleThemeToggle() {
+  isDark.value = !isDark.value
+  localStorage.setItem('theme', isDark.value ? 'dark' : 'light')
+  document.documentElement.classList.toggle('dark')
+}
+function initTheme() {
+  if (isDark.value) {
+    document.documentElement.classList.add('dark')
+  }
+}
+// 初始化主题
+onMounted(() => {
+  initTheme()
+})
 </script>
+
 <template>
   <div class="banner">
     <div class="left">
@@ -13,8 +30,8 @@ function toggleTheme() {}
       <div class="language">
         <ion-icon name="language-outline"></ion-icon>
       </div>
-      <div class="theme" @click="toggleTheme">
-        <img src="/svg/sunny.svg" />
+      <div class="theme" @click="handleThemeToggle">
+        <ion-icon :name="isDark ? 'moon-outline' : 'sunny-outline'"></ion-icon>
       </div>
       <div class="notification">
         <RouterLink to="/notification" class="router-link"
@@ -31,21 +48,64 @@ function toggleTheme() {}
   <div class="main">
     <RouterView />
   </div>
+  <div class="clip"></div>
 </template>
+
+<style>
+/* 全局CSS变量 */
+:root {
+  --background-color: #fff;
+  --text-color: #222;
+  --color-01: rgba(0, 0, 0, 0.1);
+  --border-color: rgba(0, 0, 0, 0.2);
+  --border-color-deep: rgba(0, 0, 0, 0.25);
+  --hover-color: rgba(0, 0, 0, 0.2);
+  --middle-color: rgba(0, 0, 0, 0.5);
+  --deep-color-8: rgba(0, 0, 0, 0.8);
+  --deep-color-10: rgba(0, 0, 0, 1);
+  --main-background: #3d4152;
+  --main-color-666: rgb(102, 102, 102);
+  --more-color-1: rgb(245, 247, 250);
+  --more-color-2: rgb(228, 231, 237);
+  --theme-background-inverted: #1c1b20;
+  --show-color: rgba(0, 0, 0, 0.2);
+}
+
+:root.dark {
+  --background-color: #1c1b20;
+  --text-color: #f5f7fa;
+  --color-01: rgba(255, 255, 255, 0.1);
+  --border-color: rgba(255, 255, 255, 0.2);
+  --middle-color: rgba(255, 255, 255, 0.5);
+  --border-color-deep: rgba(255, 255, 255, 0.25);
+  --hover-color: rgba(255, 255, 255, 0.2);
+  --deep-color-8: rgba(255, 255, 255, 0.8);
+  --deep-color-10: rgba(255, 255, 255, 1);
+  --main-background: #222126;
+  --main-color-666: rgb(200, 200, 200);
+  --more-color-1: #1c1b20;
+  --more-color-2: #222126;
+  --theme-background-inverted: #e0e0e5;
+  --show-color: rgba(0, 0, 0, 0.7);
+}
+</style>
+
 <style scoped>
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
+/* 移除主题切换动画样式，使用ThemeToggleAnimation组件 */
 .banner {
   position: fixed;
   height: 50px;
   width: 100vw;
   top: 0;
   right: 0;
-  background: #fff;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  background: var(--background-color);
+  border-bottom: 1px solid var(--border-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -64,7 +124,7 @@ function toggleTheme() {}
   padding: 0 0 0 130px;
   font-weight: 700;
   font-size: 30px;
-  color: #222;
+  color: var(--text-color);
   text-decoration: none;
   transition: 0.5s;
 }
@@ -89,7 +149,7 @@ function toggleTheme() {}
   position: absolute;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--hover-color);
   border-radius: 50%;
   transition: 0.5s;
   opacity: 0;
@@ -98,7 +158,7 @@ function toggleTheme() {}
   opacity: 1;
 }
 .banner .right .notification ion-icon {
-  color: #222;
+  color: var(--text-color);
   font-size: 35px;
 }
 .banner .right .me {
@@ -113,7 +173,7 @@ function toggleTheme() {}
   position: absolute;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--hover-color);
   border-radius: 50%;
   transition: 0.5s;
   opacity: 0;
@@ -122,7 +182,7 @@ function toggleTheme() {}
   opacity: 1;
 }
 .banner .right .me ion-icon {
-  color: #222;
+  color: var(--text-color);
   font-size: 40px;
 }
 .banner .right .language {
@@ -133,7 +193,7 @@ function toggleTheme() {}
   align-items: center;
 }
 .banner .right .language ion-icon {
-  color: #222;
+  color: var(--text-color);
   font-size: 35px;
   padding: 0 0 5px 0;
 }
@@ -142,7 +202,7 @@ function toggleTheme() {}
   position: absolute;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--hover-color);
   border-radius: 50%;
   transition: 0.5s;
   opacity: 0;
@@ -156,9 +216,10 @@ function toggleTheme() {}
   position: relative;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
-.banner .right .theme img {
-  color: #222;
+.banner .right .theme ion-icon {
+  color: var(--text-color);
   width: 35px;
   height: 35px;
 }
@@ -167,7 +228,7 @@ function toggleTheme() {}
   position: absolute;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--hover-color);
   border-radius: 50%;
   transition: 0.5s;
   opacity: 0;
@@ -180,8 +241,36 @@ function toggleTheme() {}
   top: 0;
   padding-top: 50px;
   padding-left: 75px;
-  background: #3d4152;
+  background: var(--main-background);
   width: 100%;
   height: 100vh;
+}
+.clip {
+  z-index: 2;
+  position: fixed;
+  bottom: 3rem;
+  left: 3rem;
+  width: 0rem;
+  height: 0rem;
+  border-radius: 100%;
+}
+.clip.anim {
+  animation: open 1.5s ease-in;
+}
+@keyframes open {
+  0% {
+    bottom: 3rem;
+    left: 3rem;
+    width: 0rem;
+    height: 0rem;
+    clip-path: circle(0rem at center);
+  }
+  100% {
+    bottom: calc(-250vmax + 3rem);
+    left: calc(-250vmax + 3rem);
+    width: 500vmax;
+    height: 500vmax;
+    clip-path: circle(100% at center);
+  }
 }
 </style>

@@ -73,16 +73,16 @@ const toNotification = () => {
 * {
   padding: 0;
   margin: 0;
+  color: var(--text-color);
 }
 .page {
   width: 100%;
   min-height: 100vh;
-  background: #fff;
+  background: var(--background-color);
   padding-top: 2vh;
 }
 .notification {
   margin: 0 2vw;
-  /* background: #e4c1f9; */
   min-height: 60vh;
 }
 
@@ -90,17 +90,18 @@ const toNotification = () => {
   height: 48px;
   list-style: none;
   cursor: pointer;
+  background: var(--background-color);
   overflow: hidden;
   transition: 0.5s;
 }
 .notification ul li:hover {
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--show-color);
 }
 .notification ul li.active {
   height: 120px;
 }
 .notification ul li .all {
-  border-top: 1px solid rgba(0, 0, 0, 0.25);
+  border-top: 1px solid var(--border-color-deep);
   margin: 0 12px;
   height: 48px;
   transition: 0.5s;
@@ -123,7 +124,7 @@ const toNotification = () => {
   font-size: 17px;
 }
 .notification ul li .out span {
-  color: rgba(0, 0, 0, 0.8);
+  color: var(--deep-color-8);
   padding-right: 5px;
   transition: 0.5s;
 }
@@ -163,8 +164,8 @@ const toNotification = () => {
   height: 30px;
   margin-top: 10px;
   border-radius: 3px;
-  border: 1px solid rgba(0, 0, 0, 0.25);
-  color: rgba(0, 0, 0, 0.8);
+  border: 1px solid var(--border-color-deep);
+  color: var(--deep-color-8);
   text-decoration: none;
   display: flex;
   justify-content: center;
@@ -174,13 +175,13 @@ const toNotification = () => {
 .title .router-link:hover {
   border: 1px solid #468faf;
   background: #89c2d9;
-  color: #fff;
+  color: var(--background-color);
   width: 80px;
   height: 35px;
 }
 .footer {
   margin: 2vh 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.25);
+  border-top: 1px solid var(--border-color-deep);
   min-height: 7vh;
   display: flex;
   align-items: center;
@@ -189,7 +190,7 @@ const toNotification = () => {
 .footer .txt {
   padding: 0 10px;
   font-size: 15px;
-  color: rgba(0, 0, 0, 0.8);
+  color: var(--deep-color-8);
   transition: 0.5s;
   cursor: default;
 }

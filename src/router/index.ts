@@ -48,11 +48,6 @@ const router = createRouter({
       component: () => import('../views/MeView.vue')
     },
     {
-      path: '/more',
-      name: 'more',
-      component: () => import('../views/MoreView.vue')
-    },
-    {
       path: '/notification',
       name: 'notification',
       component: () => import('../views/NotificationView.vue')

@@ -143,7 +143,7 @@ const clearAllHistory = () => {
 .history-page {
   display: flex;
   gap: 20px;
-  background: #fff;
+  background: var(--background-color);
   padding: 20px;
   height: 100%;
 }
@@ -158,7 +158,7 @@ const clearAllHistory = () => {
   font-weight: bold;
   margin-bottom: 20px;
   cursor: default;
-  color: #2c3e50;
+  color: var(--text-color);
   transition: 0.5s;
 }
 .history-title:hover {
@@ -169,9 +169,9 @@ const clearAllHistory = () => {
   width: 300px;
   padding: 20px;
   margin-top: 100px;
-  background: #fff;
+  background: var(--background-color);
   border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px var(--color-01);
   height: fit-content;
 }
 
@@ -181,24 +181,25 @@ const clearAllHistory = () => {
 
 .search-box .el-input {
   transition: 0.5s;
+  background: var(--background-color);
 }
 
 .search-box .el-input:hover {
   transform: scale(1.2);
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--border-color);
   border-radius: 8px;
 }
 
 .search-box .el-input:hover .el-input__wrapper {
-  background: transparent;
+  background: var(--background-color);
 }
 
 .search-box .el-input .el-input__wrapper:focus-within {
-  box-shadow: 0 0 0 1px #606266;
+  box-shadow: 0 0 0 1px var(--main-background);
 }
 
 .search-box .el-input .el-input__wrapper:hover {
-  box-shadow: 0 0 0 1px #606266;
+  box-shadow: 0 0 0 1px var(--main-background);
 }
 
 .history-group {
@@ -208,11 +209,11 @@ const clearAllHistory = () => {
 .date-header {
   font-size: 18px;
   font-weight: 600;
-  color: #606266;
+  color: var(--text-color);
   margin-bottom: 15px;
   padding-bottom: 8px;
   cursor: default;
-  border-bottom: 2px solid #ebeef5;
+  border-bottom: 2px solid var(--more-color-2);
   transition: 0.5s;
 }
 .date-header:hover {
@@ -230,9 +231,9 @@ const clearAllHistory = () => {
   align-items: center;
   gap: 15px;
   padding: 15px;
-  background: #fff;
+  background: var(--background-color);
   border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px var(--color-01);
   transition: transform 0.5s;
 }
 
@@ -261,7 +262,7 @@ const clearAllHistory = () => {
 .item-name {
   font-size: 16px;
   font-weight: 500;
-  color: #303133;
+  color: var(--text-color);
   margin-bottom: 8px;
   cursor: default;
   transition: 0.5s;
@@ -272,7 +273,7 @@ const clearAllHistory = () => {
 
 .item-time {
   font-size: 14px;
-  color: #909399;
+  color: var(--text-color);
   cursor: default;
   transition: 0.5s;
 }
@@ -304,18 +305,19 @@ const clearAllHistory = () => {
 
 .delete-btn:hover {
   transform: scale(1.2);
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--border-color);
   --el-button-hover-text-color: inherit;
   --el-button-hover-border-color: inherit;
 }
 
 .clear-all-btn {
   transition: 0.5s;
+  background: var(--background-color);
 }
 
 .clear-all-btn:hover {
   transform: scale(1.2);
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--border-color);
   --el-button-hover-text-color: var(--el-button-text-color);
   --el-button-hover-border-color: var(--el-button-border-color);
 }

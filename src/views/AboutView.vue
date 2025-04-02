@@ -143,6 +143,9 @@ const toggleNode = (nodeId: string) => {
 </template>
 
 <style scoped>
+* {
+  color: var(--text-color);
+}
 .about-container {
   display: flex;
   width: 100%;
@@ -152,15 +155,15 @@ const toggleNode = (nodeId: string) => {
 .left {
   width: 300px;
   height: 100%;
-  border-right: 1px solid #000;
-  background-color: #f0f0f0;
+  border-right: 1px solid var(--deep-color-10);
+  background-color: var(--more-color-1);
   padding: 20px 0;
 }
 
 .right {
   flex: 1;
   height: 100%;
-  background-color: #f0f0f0;
+  background-color: var(--more-color-1);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -203,11 +206,11 @@ const toggleNode = (nodeId: string) => {
   padding: 12px 20px;
   cursor: pointer;
   transition: 0.5s;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 1px solid var(--color-01);
 }
 
 .node-header:hover {
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--border-color);
 }
 
 .node-header:hover .label {
@@ -220,7 +223,7 @@ const toggleNode = (nodeId: string) => {
 }
 
 .node-header .arrow {
-  color: rgba(0, 0, 0, 0.8);
+  color: var(--text-color);
   transition: 0.5s;
 }
 
@@ -245,7 +248,7 @@ const toggleNode = (nodeId: string) => {
 }
 
 .node-children li:hover {
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--border-color);
   font-size: 17px;
 }
 
@@ -277,7 +280,7 @@ const toggleNode = (nodeId: string) => {
 .right {
   position: relative;
   flex: 1;
-  background-color: #f0f0f0;
+  background-color: var(--more-color-1);
 }
 
 .right > * {

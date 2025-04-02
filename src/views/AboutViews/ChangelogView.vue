@@ -8,14 +8,19 @@
       <h1 class="section-title">版本更新</h1>
       <div class="section-content">
         <p><strong>版本 1.0.4</strong> - 2025年1月15日</p>
-        <p>进行整体设计风格的规划，确保图标、文字、元素位置等方面的一致性；配置路由跳转及页面切换功能的实现。</p>
-        <p>设计并实现 Banner、SideBar、Loading 等核心组件；完成Notification、labList、Content、Footer 等页面的设计与实现。</p>
+        <p>
+          进行整体设计风格的规划，确保图标、文字、元素位置等方面的一致性；配置路由跳转及页面切换功能的实现。
+        </p>
+        <p>
+          设计并实现 Banner、SideBar、Loading 等核心组件；完成Notification、labList、Content、Footer
+          等页面的设计与实现。
+        </p>
         <p><strong>版本 1.0.3</strong> - 2024年12月20日</p>
         <p>优化页面元素的交互效果，使操作更加流畅自然，并通过多元化的页面配色方案提升视觉体验。</p>
         <p>完善用户反馈系统，增加更多的用户互动功能。</p>
       </div>
     </section>
-    
+
     <section class="about-section">
       <h1 class="section-title">已知问题</h1>
       <div class="section-content">
@@ -24,7 +29,7 @@
         <p>我们正在积极解决这些问题，并将在下一版本中修复。</p>
       </div>
     </section>
-    
+
     <section class="about-section">
       <h1 class="section-title">新功能</h1>
       <div class="section-content">
@@ -39,6 +44,9 @@
 </template>
 
 <style scoped>
+* {
+  color: var(--text-color);
+}
 .about-container {
   display: flex;
   flex-direction: column;
@@ -50,10 +58,10 @@
 
 .about-section {
   margin-bottom: 0;
-  background-color: white;
+  background-color: var(--background-color);
   border-radius: 8px;
   padding: 25px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px var(--color-01);
   transition: all 0.5s;
 }
 
@@ -65,7 +73,7 @@
   font-size: 28px;
   font-weight: bold;
   margin-bottom: 20px;
-  color: #333;
+  color: var(--text-color);
   border-bottom: 2px solid #89c2d9;
   padding-bottom: 10px;
 }
@@ -73,7 +81,7 @@
 .section-content {
   font-size: 16px;
   line-height: 1.6;
-  color: #555;
+  color: var(--text-color);
 }
 
 .section-content p {

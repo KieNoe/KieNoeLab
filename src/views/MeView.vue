@@ -52,10 +52,13 @@ onMounted(() => {
 </template>
 
 <style scoped>
+* {
+  color: var(--text-color);
+}
 .profile-container {
   width: 100%;
   height: 100%;
-  background: #f8f9fa;
+  background: var(--more-color-1);
 }
 
 .profile-header {
@@ -64,7 +67,7 @@ onMounted(() => {
   margin: 0 40px;
   padding: 40px 0;
   padding-bottom: 20px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid --middle-color;
   display: flex;
 }
 
@@ -80,11 +83,11 @@ onMounted(() => {
   transition: 0.5s ease-in-out;
 }
 .avatar-container img {
-  width: 148px;
+  width: 180px;
   transition: 0.5s ease-in-out;
 }
 .avatar-container img:hover {
-  width: 180px;
+  width: 210px;
 }
 
 .user-info {
@@ -97,7 +100,7 @@ onMounted(() => {
   margin: 0 0 5px 0;
 }
 .username .router-link {
-  color: #000;
+  color: var(--text-color);
   text-decoration: none;
   transition: 0.5s ease-in-out;
 }
@@ -107,9 +110,9 @@ onMounted(() => {
 
 .switch-account {
   border-radius: 3px;
-  border: 1px solid rgba(0, 0, 0, 0.25);
-  color: rgba(0, 0, 0, 0.8);
-  background: #f8f9fa;
+  border: 1px solid --border-color-deep;
+  color: --deep-color-8;
+  background: var(--more-color-1);
   text-decoration: none;
   display: flex;
   justify-content: center;

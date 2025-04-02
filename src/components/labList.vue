@@ -97,10 +97,13 @@ onMounted(() => {
   </div>
 </template>
 <style scoped>
+* {
+  color: var(--text-color);
+}
 .labList {
-  margin: 2vh 2vw;
-  /* background: #e4c1f9; */
+  padding: 2vh 2vw;
   min-height: 60vh;
+  background: var(--background-color);
 }
 .title {
   display: flex;
@@ -123,8 +126,8 @@ onMounted(() => {
   height: 30px;
   margin-top: 10px;
   border-radius: 3px;
-  border: 1px solid rgba(0, 0, 0, 0.25);
-  color: rgba(0, 0, 0, 0.8);
+  border: 1px solid var(--border-color-deep);
+  color: var(--border-color-deep);
   text-decoration: none;
   display: flex;
   justify-content: center;
@@ -134,7 +137,7 @@ onMounted(() => {
 .title .router-link:hover {
   border: 1px solid #468faf;
   background: #89c2d9;
-  color: #fff;
+  color: var(--background-color);
   width: 80px;
   height: 35px;
 }
@@ -144,6 +147,7 @@ onMounted(() => {
   justify-content: space-between;
   list-style: none;
   transition: 0.5s ease-in-out;
+  background: var(--background-color);
 }
 .labList .card {
   width: 300px;
@@ -154,7 +158,7 @@ onMounted(() => {
   border-radius: 5px;
   flex-direction: column;
   transform-style: preserve-3d;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 20px var(--hover-color);
   transition:
     width 0.5s ease-in-out,
     height 0.5s ease-in-out;
@@ -181,7 +185,7 @@ onMounted(() => {
 }
 .labList .card .imgBx ion-icon {
   font-size: 100px;
-  color: #fff;
+  color: var(--background-color);
   transition: 0.5s ease-in-out;
 }
 .labList .card:hover .imgBx ion-icon {
@@ -190,7 +194,7 @@ onMounted(() => {
 .labList .card .detail {
   width: 100%;
   height: 50px;
-  background: #fff;
+  background: var(--background-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -205,7 +209,7 @@ onMounted(() => {
 .labList .card .detail .txt {
   font-size: 20px;
   font-weight: 600;
-  color: rgba(0, 0, 0, 0.8);
+  color: var(--border-color-deep);
   text-decoration: none;
   transition: 0.5s ease-in-out;
 }
@@ -221,11 +225,11 @@ onMounted(() => {
   width: 70px;
   height: 30px;
   border-radius: 3px;
-  border: 1px solid rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-color-deep);
   font-size: 15px;
   font-weight: 400;
   border: none;
-  color: #fff;
+  color: var(--background-color);
   background: #00b4d8;
   display: flex;
   justify-content: center;

@@ -55,7 +55,7 @@ const subjects = [
 .lab-list-container {
   padding: 20px;
   min-height: 100vh;
-  background: #fff;
+  background: var(--background-color);
 }
 
 .header {
@@ -89,7 +89,7 @@ const subjects = [
 }
 .filter-option:hover {
   transform: scale(1.2) translateX(10px);
-  background: rgba(0, 0, 0, 0.15);
+  background: var(--color-01);
 }
 
 .lab-content {

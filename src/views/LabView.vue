@@ -386,10 +386,10 @@ onUnmounted(() => {
   right: -400px;
   width: 400px;
   height: 100%;
-  background-color: #fff;
+  background-color: var(--background-color);
   border-radius: 20px;
   transition: 0.5s;
-  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: -2px 0 10px var(--color-01);
   z-index: 10;
 }
 .parameterBox.active {
@@ -413,7 +413,7 @@ onUnmounted(() => {
 .parameter-title {
   font-size: 24px;
   margin-bottom: 30px;
-  color: #333;
+  color: var(--main-background);
   text-align: center;
 }
 
@@ -427,7 +427,7 @@ onUnmounted(() => {
 .object-params h3 {
   font-size: 18px;
   margin-bottom: 20px;
-  color: #666;
+  color: var(--main-color-666);
   cursor: default;
   transition: 0.5s;
 }
@@ -451,7 +451,7 @@ onUnmounted(() => {
 .param-label {
   display: block;
   margin-bottom: 8px;
-  color: #666;
+  color: var(--main-color-666);
 }
 
 .param-switches {
@@ -475,7 +475,7 @@ onUnmounted(() => {
 }
 
 .positionShow {
-  background-color: #f8f9fa;
+  background-color: var(--more-color-2);
   border-radius: 12px;
   padding: 15px;
   height: 84px;
@@ -485,7 +485,7 @@ onUnmounted(() => {
 }
 
 .speedShow {
-  background-color: #f8f9fa;
+  background-color: var(--more-color-2);
   border-radius: 12px;
   padding: 15px;
   height: 84px;
@@ -496,7 +496,7 @@ onUnmounted(() => {
 .positionShow:hover,
 .speedShow:hover {
   transform: scale(1.05);
-  background: rgba(0, 0, 0, 0.1);
+  background: var(--color-01);
 }
 
 .switch-item {
@@ -504,7 +504,7 @@ onUnmounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 10px 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--more-color-2);
   opacity: 1;
   transition: 0.5s;
 }
@@ -517,13 +517,13 @@ onUnmounted(() => {
 }
 
 .value-item {
-  background-color: #f5f7fa;
+  background-color: var(--more-color-1);
   padding: 15px;
   border-radius: 8px;
   margin-top: 10px;
   display: flex;
   justify-content: space-between;
-  color: #666;
+  color: var(--main-color-666);
 }
 
 .value {
@@ -538,7 +538,7 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: #fff;
+  color: var(--background-color);
 }
 .paramLists ul {
   display: flex;
@@ -564,13 +564,13 @@ onUnmounted(() => {
   left: 0;
   margin-left: 40px;
   max-width: 500px;
-  background: rgba(0, 0, 0, 0.1);
+  background: var(--color-01);
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  color: #fff;
+  color: var(--background-color);
   transition: 0.5s;
   cursor: default;
   transform: translateY(-100%);

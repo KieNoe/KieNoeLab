@@ -244,25 +244,25 @@ onMounted(() => {
 
     <!-- 播放与效果设置区域 -->
     <div class="settings-card">
-      <h2 class="card-title">播放与效果</h2>
+      <h2 class="card-title">播放与效果(未完成)</h2>
       <div class="settings-item">
         <span class="item-label">预览显示</span>
         <label class="switch">
-          <input type="checkbox" />
+          <input type="checkbox" checked />
           <span class="slider"></span>
         </label>
       </div>
       <div class="settings-item">
         <span class="item-label">是否重复播放</span>
         <label class="switch">
-          <input type="checkbox" />
+          <input type="checkbox" checked />
           <span class="slider"></span>
         </label>
       </div>
       <div class="settings-item">
         <span class="item-label">智能匹配分辨率</span>
         <label class="switch">
-          <input type="checkbox" />
+          <input type="checkbox" checked />
           <span class="slider"></span>
         </label>
       </div>
@@ -473,12 +473,17 @@ onMounted(() => {
 </template>
 
 <style scoped>
+* {
+  color: var(--text-color);
+  background: var(--background-color);
+}
 .settings-container {
   width: 100%;
   height: 100%;
   padding: 40px;
-  background: #f8f9fa;
+  background: var(--background-color);
   position: relative;
+  color: var(--text-color);
 }
 
 .overlay {
@@ -487,7 +492,7 @@ onMounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--middle-color);
   z-index: 10;
   opacity: 0;
   pointer-events: none;
@@ -505,10 +510,11 @@ onMounted(() => {
   left: 50%;
   transform: translate(-50%, -150%) scale(0.95);
   opacity: 0;
-  background: white;
+  background: var(--background-color);
   padding: 24px;
   border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  color: var(--text-color);
+  box-shadow: 0 4px 20px var(--border-color);
   z-index: 11;
   width: 90%;
   max-width: 500px;
@@ -529,24 +535,25 @@ onMounted(() => {
 }
 
 .settings-card {
-  background: white;
+  background: var(--background-color);
   border-radius: 8px;
   padding: 24px;
+  color: var(--text-color);
   margin-bottom: 24px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px var(--color-01);
   transition: 0.5s;
 }
 
 .settings-card:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 20px var(--border-color);
 }
 
 .card-title {
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 20px;
-  color: #333;
+  color: var(--text-color);
   border-bottom: 2px solid #89c2d9;
   padding-bottom: 10px;
   cursor: default;
@@ -563,12 +570,15 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 12px 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid var(--color-01);
   transition: background-color 0.3s ease;
 }
 
 .settings-item:hover {
   background-color: rgba(137, 194, 217, 0.1);
+}
+.settings-item:hover span {
+  background-color: rgba(137, 194, 217, 0);
 }
 .settings-item:last-child {
   border-bottom: none;
@@ -576,7 +586,7 @@ onMounted(() => {
 
 .item-label {
   font-size: 16px;
-  color: #333;
+  color: var(--text-color);
   transition: 0.5s;
 }
 
@@ -585,7 +595,7 @@ onMounted(() => {
 }
 
 .item-value {
-  color: #666;
+  color: var(--main-color-666);
   transition: color 0.3s ease;
 }
 
@@ -601,7 +611,7 @@ onMounted(() => {
 
 .setting-button:hover {
   background: #89c2d9;
-  color: white;
+  color: var(--background-color);
   transform: scale(1.05);
 }
 
@@ -625,7 +635,7 @@ onMounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: var(--more-color-1);
   transition: 0.4s ease;
   border-radius: 24px;
 }
@@ -637,7 +647,7 @@ onMounted(() => {
   width: 16px;
   left: 4px;
   bottom: 4px;
-  background-color: white;
+  background-color: var(--background-color);
   transition: 0.4s ease;
   border-radius: 50%;
 }
@@ -661,7 +671,7 @@ input:checked + .slider:before {
   border-radius: 50%;
   margin: 0 auto;
   cursor: pointer;
-  background-color: #f0f2f5;
+  background-color: var(--more-color-1);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -671,7 +681,7 @@ input:checked + .slider:before {
 
 .avatar-preview-large:hover {
   transform: scale(1.15);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px var(--color-01);
 }
 
 .avatar-preview-large img {
@@ -690,7 +700,7 @@ input:checked + .slider:before {
 
 .avatar-preview:hover {
   transform: scale(1.1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px var(--border-color);
 }
 .upload-placeholder {
   display: flex;
@@ -706,7 +716,7 @@ input:checked + .slider:before {
 
 .upload-tip {
   margin-top: 16px;
-  color: #666;
+  color: var(--main-color-666);
   font-size: 14px;
 }
 
@@ -716,13 +726,13 @@ input:checked + .slider:before {
   align-items: center;
   margin-bottom: 20px;
   padding-bottom: 16px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid var(--color-01);
 }
 
 .card-header h3 {
   margin: 0;
   font-size: 20px;
-  color: #333;
+  color: var(--text-color);
   cursor: default;
   transition: 0.5s;
 }
@@ -736,7 +746,7 @@ input:checked + .slider:before {
   border-radius: 50%;
   border: none;
   background: transparent;
-  color: #666;
+  color: var(--main-color-666);
   font-size: 24px;
   cursor: pointer;
   display: flex;
@@ -796,10 +806,10 @@ input:checked + .slider:before {
 
 .notification-section h4 {
   font-size: 18px;
-  color: #333;
+  color: var(--text-color);
   margin-bottom: 15px;
   padding-bottom: 8px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--more-color-2);
   cursor: default;
   transition: 0.5s;
 }
@@ -833,7 +843,7 @@ input:checked + .slider:before {
 }
 
 .radio-option span {
-  color: #333;
+  color: var(--text-color);
 }
 
 .custom-time-inputs {
@@ -845,7 +855,7 @@ input:checked + .slider:before {
 
 .time-input {
   padding: 6px 10px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--more-color-1);
   border-radius: 4px;
   outline: none;
   transition: border-color 0.3s;
@@ -859,7 +869,7 @@ input:checked + .slider:before {
   width: 100%;
   padding: 12px;
   background-color: #89c2d9;
-  color: white;
+  color: var(--background-color);
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -899,14 +909,14 @@ input:checked + .slider:before {
   height: 120px;
   border-radius: 50%;
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px var(--color-01);
   margin-bottom: 20px;
   transition: 0.5s;
 }
 
 .account-avatar:hover {
   transform: scale(1.1);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 20px var(--border-color);
 }
 
 .account-avatar img {
@@ -945,14 +955,14 @@ input:checked + .slider:before {
   height: 120px;
   border-radius: 50%;
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px var(--color-01);
   margin-bottom: 20px;
   transition: 0.5s;
 }
 
 .account-avatar:hover {
   transform: scale(1.1);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 20px var(--border-color);
 }
 
 .account-avatar img {
@@ -973,23 +983,23 @@ input:checked + .slider:before {
   justify-content: space-between;
   align-items: center;
   padding: 8px 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid var(--color-01);
 }
 
 .info-label {
-  color: #666;
+  color: var(--main-color-666);
   font-size: 14px;
 }
 
 .info-value {
-  color: #333;
+  color: var(--text-color);
   font-weight: 500;
 }
 
 .logout-button {
   padding: 8px 24px;
   background-color: #ff4d4f;
-  color: white;
+  color: var(--background-color);
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -1042,13 +1052,13 @@ input:checked + .slider:before {
   height: 120px;
   border-radius: 50%;
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px var(--color-01);
   transition: 0.5s;
 }
 
 .contact-avatar:hover {
   transform: scale(1.1);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 20px var(--border-color);
 }
 
 .contact-avatar img {
@@ -1067,7 +1077,7 @@ input:checked + .slider:before {
 .modify-button {
   padding: 8px 24px;
   background-color: #89c2d9;
-  color: white;
+  color: var(--background-color);
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -1097,7 +1107,7 @@ input:checked + .slider:before {
 .email-input {
   flex: 1;
   padding: 8px 12px;
-  border: 1px solid #dcdfe6;
+  border: 1px solid var(--main-color-2);
   border-radius: 4px;
   font-size: 14px;
   transition: 0.5s;
@@ -1115,7 +1125,7 @@ input:checked + .slider:before {
 .verification-input {
   width: 100%;
   padding: 8px 12px;
-  border: 1px solid #dcdfe6;
+  border: 1px solid var(--main-color-2);
   border-radius: 4px;
   font-size: 14px;
   transition: 0.5s;
@@ -1134,7 +1144,7 @@ input:checked + .slider:before {
   white-space: nowrap;
   padding: 8px 16px;
   background-color: #89c2d9;
-  color: white;
+  color: var(--background-color);
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -1155,7 +1165,7 @@ input:checked + .slider:before {
   width: 100%;
   padding: 8px 24px;
   background-color: #89c2d9;
-  color: white;
+  color: var(--background-color);
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -1172,7 +1182,7 @@ input:checked + .slider:before {
   margin: 0 auto;
   border-radius: 50%;
   overflow: hidden;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--main-color-2);
   transition: 0.5s;
 }
 .changeEmail .email-avatar:hover {

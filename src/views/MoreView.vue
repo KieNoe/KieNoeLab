@@ -93,12 +93,13 @@ const selectedLabels = computed(() => {
 * {
   padding: 0;
   margin: 0;
+  color: var(--text-color);
 }
 
 .page {
   width: 100%;
   height: 100%;
-  background: #fff;
+  background: var(--background-color);
   padding-top: 2vh;
   display: flex;
   flex-direction: column;
@@ -154,7 +155,7 @@ const selectedLabels = computed(() => {
   justify-content: space-between;
   align-items: center;
   padding: 15px 25px;
-  background-color: #f5f7fa;
+  background-color: var(--more-color-1);
   border-radius: 8px;
   transition: all 0.5s ease-in-out;
   width: 100%;
@@ -162,9 +163,9 @@ const selectedLabels = computed(() => {
 }
 
 .switch-item:hover {
-  background-color: #e4e7ed;
+  background-color: var(--more-color-2);
   transform: translateX(5px) scale(1.07);
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px 0 var(--color-01);
 }
 
 .switch-item :deep(.el-color-picker) {
@@ -178,7 +179,7 @@ const selectedLabels = computed(() => {
 
 .switch-label {
   font-size: 20px;
-  color: #606266;
+  color: var(--main-background);
   font-weight: 500;
   transition: all 0.5s ease-in-out;
 }
@@ -191,7 +192,7 @@ const selectedLabels = computed(() => {
 
 .footer {
   margin: 2vh 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.25);
+  border-top: 1px solid var(--border-color-deep);
   min-height: 7vh;
   display: flex;
   align-items: center;
@@ -201,7 +202,7 @@ const selectedLabels = computed(() => {
 .footer .txt {
   padding: 0 10px;
   font-size: 15px;
-  color: rgba(0, 0, 0, 0.8);
+  color: var(--deep-color-8);
   transition: 0.5s ease-in-out;
   cursor: default;
 }
@@ -220,7 +221,7 @@ const selectedLabels = computed(() => {
   justify-content: space-between;
   align-items: center;
   padding: 15px 25px;
-  background-color: #f5f7fa;
+  background-color: var(--more-color-1);
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.5s ease-in-out;
@@ -230,9 +231,9 @@ const selectedLabels = computed(() => {
 }
 
 .select-header:hover {
-  background-color: #e4e7ed;
+  background-color: var(--more-color-2);
   transform: translateX(5px) scale(1.07);
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px 0 var(--color-01);
 }
 
 .select-header:hover .switch-label {
@@ -243,7 +244,7 @@ const selectedLabels = computed(() => {
 .select-content {
   flex: 1;
   margin: 0 15px;
-  color: #606266;
+  color: var(--main-background);
   font-size: 16px;
   white-space: nowrap;
   overflow: hidden;
@@ -252,7 +253,7 @@ const selectedLabels = computed(() => {
 
 .arrow {
   font-size: 12px;
-  color: #909399;
+  color: var(--main-background);
   transition: transform 0.5s ease-in-out;
 }
 
@@ -266,9 +267,9 @@ const selectedLabels = computed(() => {
   left: 0;
   right: 0;
   margin-top: 5px;
-  background-color: #fff;
+  background-color: var(--background-color);
   border-radius: 8px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px 0 var(--color-01);
   z-index: 1000;
   max-height: 300px;
   overflow-y: auto;
@@ -303,23 +304,23 @@ const selectedLabels = computed(() => {
 }
 
 .select-option:hover {
-  background-color: #f5f7fa;
+  background-color: var(--more-color-1);
   transform: scale(1.02);
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px 0 var(--color-01);
 }
 
 .select-option.selected {
-  background-color: #ecf5ff;
+  background-color: var(--more-color-1);
   color: #409eff;
   transform: scale(1.02);
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px 0 var(--color-01);
 }
 
 .checkbox {
   display: inline-block;
   width: 16px;
   height: 16px;
-  border: 1px solid #dcdfe6;
+  border: 1px solid var(--more-color-2);
   border-radius: 2px;
   margin-right: 8px;
   text-align: center;
@@ -332,7 +333,7 @@ const selectedLabels = computed(() => {
 .checkbox.checked {
   background-color: #409eff;
   border-color: #409eff;
-  color: #fff;
+  color: var(--background-color);
 }
 
 .construction-area {
@@ -347,11 +348,11 @@ const selectedLabels = computed(() => {
   justify-content: center;
   gap: 10px;
   margin-right: 20px;
-  color: #909399;
+  color: var(--main-background);
   font-size: 16px;
 }
 .construction-area span {
-  color: rgba(0, 0, 0, 0.8);
+  color: var(--deep-color-8);
   font-size: 30px;
   cursor: default;
   transition: 0.5s ease-in-out;
@@ -360,7 +361,7 @@ const selectedLabels = computed(() => {
   font-size: 40px;
 }
 .construction-area ion-icon {
-  color: rgba(0, 0, 0, 0.8);
+  color: var(--deep-color-8);
   font-size: 60px;
   transition: 0.5s ease-in-out;
 }

@@ -71,6 +71,9 @@
 </template>
 
 <style scoped>
+* {
+  color: var(--text-color);
+}
 .about-container {
   display: flex;
   flex-direction: column;
@@ -82,10 +85,10 @@
 
 .about-section {
   margin-bottom: 0;
-  background-color: white;
+  background-color: var(--background-color);
   border-radius: 8px;
   padding: 25px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px var(--color-01);
   transition: all 0.5s;
 }
 
@@ -97,7 +100,7 @@
   font-size: 28px;
   font-weight: bold;
   margin-bottom: 20px;
-  color: #333;
+  color: var(--text-color);
   border-bottom: 2px solid #89c2d9;
   padding-bottom: 10px;
 }
@@ -105,7 +108,7 @@
 .section-content {
   font-size: 16px;
   line-height: 1.6;
-  color: #555;
+  color: var(--text-color);
 }
 
 .section-content p {

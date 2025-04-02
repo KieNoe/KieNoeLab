@@ -77,10 +77,14 @@ const paginatedNotifications = ref(
 </template>
 
 <style scoped>
+* {
+  color: var(--text-color);
+  background: var(--background-color);
+}
 .notification-page {
   padding: 30px;
   min-height: 100vh;
-  background: #f5f7fa;
+  background: var(--background-color);
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -95,7 +99,7 @@ const paginatedNotifications = ref(
 .title span {
   font-size: 45px;
   font-weight: 1200;
-  color: #333;
+  color: var(--text-color);
   transition: 0.5s;
 }
 
@@ -116,7 +120,7 @@ const paginatedNotifications = ref(
 
 .notification-card:hover {
   transform: translateY(-10px) scale(1.05);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 16px var(--color-01);
 }
 
 .card-header {
@@ -125,12 +129,12 @@ const paginatedNotifications = ref(
 
 .card-header h2 {
   font-size: 24px;
-  color: #333;
+  color: var(--text-color);
   margin: 0;
 }
 
 .card-content {
-  color: #666;
+  color: var(--text-color);
   line-height: 1.6;
 }
 
@@ -151,7 +155,7 @@ const paginatedNotifications = ref(
 
 :deep(.el-pager li:hover) {
   transform: scale(1.3);
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--background-color);
 }
 
 :deep(.btn-prev),
@@ -162,6 +166,6 @@ const paginatedNotifications = ref(
 :deep(.btn-prev:hover),
 :deep(.btn-next:hover) {
   transform: scale(1.3);
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--background-color);
 }
 </style>

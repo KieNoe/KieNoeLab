@@ -121,12 +121,6 @@ onMounted(() => {
           <span class="text">我</span>
         </RouterLink>
       </li>
-      <li class="list more" style="--clr: #0fc70f">
-        <RouterLink ref="router-link" to="/more" class="router-link">
-          <span class="icon"><ion-icon name="pricetags-outline"></ion-icon></span>
-          <span class="text">更多</span>
-        </RouterLink>
-      </li>
       <li class="list help" style="--clr: #2196f3">
         <RouterLink ref="router-link" to="/help" class="router-link">
           <span class="icon"><ion-icon name="help-circle-outline"></ion-icon></span>
@@ -235,8 +229,8 @@ onMounted(() => {
   width: 75px;
   top: 0;
   left: 0;
-  background: #fff;
-  border-right: 1px solid rgba(0, 0, 0, 0.25);
+  background: var(--background-color);
+  border-right: 1px solid var(--border-color-deep);
   transition: 0.5s;
   display: flex;
   justify-content: center;
@@ -252,7 +246,7 @@ onMounted(() => {
   left: 5.3px;
   width: 60px;
   height: 60px;
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--border-color-deep);
   cursor: pointer;
   border-radius: 50%;
   transition: 0.5s;
@@ -267,14 +261,14 @@ onMounted(() => {
   left: 0;
   width: 100%;
   height: 60px;
-  border-bottom: 0px solid rgba(0, 0, 0, 0.25);
+  border-bottom: 0px solid var(--border-color-deep);
   display: flex;
   align-items: center;
   justify-content: flex-start;
   padding: 0 20px;
 }
 .navigation.open .menuToggle {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  border-bottom: 1px solid var(--border-color-deep);
 }
 
 .navigation .menuToggle::before {
@@ -282,7 +276,7 @@ onMounted(() => {
   position: absolute;
   width: 30px;
   height: 2px;
-  background: #333;
+  background: var(--deep-color-10);
   transform: translateY(-8px);
   transition: 0.5s;
 }
@@ -294,14 +288,14 @@ onMounted(() => {
   position: absolute;
   width: 30px;
   height: 2px;
-  background: #333;
+  background: var(--deep-color-10);
   transform: translateY(8px);
   transition: 0.5s;
-  box-shadow: 0 -8px 0 #333;
+  box-shadow: 0 -8px 0 var(--deep-color-10);
 }
 .navigation.open .menuToggle::after {
   transform: translateY(0px) rotate(-45deg);
-  box-shadow: 0 0 0 #333;
+  box-shadow: 0 0 0 var(--main-background);
 }
 .navigation ul {
   display: flex;
@@ -332,17 +326,17 @@ onMounted(() => {
   height: 55px;
   line-height: 60px;
   transition: 0.5s;
-  color: #222;
+  color: var(--text-color);
   font-size: 1.75em;
   border-radius: 10px;
 }
 .navigation ul li.active .router-link .icon {
   background: var(--clr);
-  color: #fff;
+  color: var(--background-color);
 }
 .navigation ul li.selected .router-link .icon {
   background: var(--clr);
-  color: #fff;
+  color: var(--background-color);
 }
 .navigation ul li .router-link .icon::before {
   content: '';
@@ -370,7 +364,7 @@ onMounted(() => {
   white-space: nowrap;
   display: flex;
   align-items: center;
-  color: #333;
+  color: var(--text-color);
   opacity: 0;
   visibility: hidden;
   transition: 0.5s;
@@ -393,7 +387,7 @@ onMounted(() => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-top: 1px solid rgba(0, 0, 0, 0.25);
+  border-top: 1px solid var(--border-color-deep);
   white-space: nowrap;
   opacity: 0;
   transition: 0.5s;
@@ -412,7 +406,7 @@ onMounted(() => {
 .navigation .detail p .router-link {
   padding: 0 20px 0 0;
   text-decoration: none;
-  color: #222;
+  color: var(--text-color);
   transition: 0.5s;
 }
 .navigation .detail p .active {

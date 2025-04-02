@@ -84,12 +84,13 @@ const toggleActive = (index: number) => {
 * {
   padding: 0;
   margin: 0;
+  color: var(--text-color);
 }
 
 .page {
   width: 100%;
   min-height: 100vh;
-  background: #fff;
+  background: var(--background-color);
   padding-top: 2vh;
 }
 
@@ -105,9 +106,15 @@ const toggleActive = (index: number) => {
   overflow: hidden;
   transition: 0.5s;
 }
+.help-section ul li:hover .all {
+  background: var(--show-color);
+}
 
-.help-section ul li:hover {
-  background: rgba(0, 0, 0, 0.2);
+.help-section ul li:hover .out {
+  background: rgba(0, 0, 0, 0);
+}
+.help-section ul li:hover .in {
+  background: rgba(0, 0, 0, 0);
 }
 
 .help-section ul li.active {
@@ -115,8 +122,9 @@ const toggleActive = (index: number) => {
 }
 
 .help-section ul li .all {
-  border-top: 1px solid rgba(0, 0, 0, 0.25);
-  margin: 0 12px;
+  border-top: 1px solid var(--border-color-deep);
+  background: var(--background-color);
+  padding: 0 12px;
   height: 48px;
   transition: 0.5s;
 }
@@ -126,12 +134,13 @@ const toggleActive = (index: number) => {
 }
 
 .help-section ul li:nth-child(1) .all {
-  border-top: 0 solid #000;
+  border-top: 0 solid var(--deep-color-10);
 }
 
 .help-section ul li .out {
   height: 48px;
   line-height: 48px;
+  background: var(--background-color);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -143,7 +152,7 @@ const toggleActive = (index: number) => {
 }
 
 .help-section ul li .out span {
-  color: rgba(0, 0, 0, 0.8);
+  color: var(--text-color);
   padding-right: 5px;
   transition: 0.5s;
 }
