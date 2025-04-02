@@ -2,7 +2,9 @@
 import { RouterLink } from 'vue-router'
 import { onMounted } from 'vue'
 import VanillaTilt from 'vanilla-tilt'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 defineProps({
   name: String,
   toWhere: String,
@@ -67,7 +69,9 @@ onMounted(() => {
   <div class="labList">
     <div class="title">
       <span>{{ name }}</span>
-      <RouterLink v-if="ifMore" :to="{ path: toWhere }" class="router-link"> 更多 </RouterLink>
+      <RouterLink v-if="ifMore" :to="{ path: toWhere }" class="router-link">
+        {{ t('More') }}
+      </RouterLink>
     </div>
     <el-card :body-style="{ padding: '0' }">
       <ul>

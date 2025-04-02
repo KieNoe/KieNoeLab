@@ -2,6 +2,26 @@
 import BannerComponent from './components/BannerComponent.vue'
 import SideBar from './components/SideBar.vue'
 import LoadingComponent from './components/LoadingComponent.vue'
+import { onMounted } from 'vue'
+
+// 将事件监听放在 onMounted 中，确保 DOM 已加载
+onMounted(() => {
+  document.addEventListener('click', function (e) {
+    const ripple = document.createElement('div')
+    ripple.classList.add('ripple-effect') // 修改类名，避免与组件内的样式冲突
+
+    document.body.appendChild(ripple)
+
+    // 设置涟漪的位置（让其中心位于鼠标点击位置）
+    ripple.style.left = `${e.clientX - 10}px`
+    ripple.style.top = `${e.clientY - 10}px`
+
+    // 动画结束后删除元素，避免 DOM 过多
+    ripple.addEventListener('animationend', () => {
+      ripple.remove()
+    })
+  })
+})
 </script>
 
 <template>
