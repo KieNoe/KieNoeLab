@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { nextTick } from 'vue'
-import { useUserStore } from '@/stores/userStore'
-import { useGlobalStore } from '@/stores/pageLoad'
+// Fix the import path - adjust based on your actual file structure
+import { useUserStore } from '../stores/userStore'
+import { useGlobalStore } from '../stores/pageLoad'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

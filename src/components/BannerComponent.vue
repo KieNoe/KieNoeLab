@@ -1,17 +1,33 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import { onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { locale } = useI18n()
 
 const isDark = ref(localStorage.getItem('theme') === 'dark')
+const isButtonEnabled = ref(true)
 function handleThemeToggle() {
-  isDark.value = !isDark.value
-  localStorage.setItem('theme', isDark.value ? 'dark' : 'light')
-  document.documentElement.classList.toggle('dark')
+  if (isButtonEnabled.value) {
+    isButtonEnabled.value = false
+    isDark.value = !isDark.value
+    localStorage.setItem('theme', isDark.value ? 'dark' : 'light')
+    document.documentElement.classList.toggle('dark')
+    setTimeout(() => {
+      isButtonEnabled.value = true
+    }, 500)
+  }
 }
 function initTheme() {
   if (isDark.value) {
     document.documentElement.classList.add('dark')
   }
+}
+function handleToggleLanguage() {
+  const currentLanguage = localStorage.getItem('language') || 'zh'
+  const newLanguage = currentLanguage === 'zh' ? 'en' : 'zh'
+  locale.value = newLanguage
+  localStorage.setItem('language', newLanguage)
 }
 // 初始化主题
 onMounted(() => {
@@ -27,7 +43,7 @@ onMounted(() => {
       </div>
     </div>
     <div class="right">
-      <div class="language">
+      <div class="language" @click="handleToggleLanguage">
         <ion-icon name="language-outline"></ion-icon>
       </div>
       <div class="theme" @click="handleThemeToggle">
@@ -244,33 +260,5 @@ onMounted(() => {
   background: var(--main-background);
   width: 100%;
   height: 100vh;
-}
-.clip {
-  z-index: 2;
-  position: fixed;
-  bottom: 3rem;
-  left: 3rem;
-  width: 0rem;
-  height: 0rem;
-  border-radius: 100%;
-}
-.clip.anim {
-  animation: open 1.5s ease-in;
-}
-@keyframes open {
-  0% {
-    bottom: 3rem;
-    left: 3rem;
-    width: 0rem;
-    height: 0rem;
-    clip-path: circle(0rem at center);
-  }
-  100% {
-    bottom: calc(-250vmax + 3rem);
-    left: calc(-250vmax + 3rem);
-    width: 500vmax;
-    height: 500vmax;
-    clip-path: circle(100% at center);
-  }
 }
 </style>

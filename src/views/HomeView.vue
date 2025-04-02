@@ -3,6 +3,9 @@ import { RouterLink } from 'vue-router'
 import { ref } from 'vue'
 import labList from '@/components/labList.vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const router = useRouter()
 const msg = '实验样例'
@@ -38,8 +41,8 @@ const toNotification = () => {
   <div class="page">
     <div class="notification">
       <div class="title">
-        <span @click="toNotification">通知</span>
-        <RouterLink to="/notification" class="router-link"> 更多 </RouterLink>
+        <span @click="toNotification">{{ t('HomeViewNotification') }}</span>
+        <RouterLink to="/notification" class="router-link"> {{ t('More') }} </RouterLink>
       </div>
       <el-card :body-style="{ padding: '0' }">
         <ul class="demo-collapse">
