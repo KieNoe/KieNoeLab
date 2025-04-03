@@ -184,9 +184,38 @@ onMounted(() => {
   opacity: 0;
   transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
+.content p {
+  z-index: 2;
+}
 .card:hover .content {
   transform: translate(-50%, -50%) rotate(0deg);
   opacity: 1;
+}
+.content::before,
+.content::after {
+  position: absolute;
+  content: '';
+  width: 20%;
+  height: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+  font-weight: bold;
+  background-color: rgba(189, 224, 254, 0.5);
+  transition: all 0.5s;
+  z-index: 0;
+}
+.content::after {
+  top: 0;
+  right: 0;
+  border-radius: 0 15px 0 100%;
+}
+
+.content::before {
+  bottom: 0;
+  left: 0;
+  border-radius: 0 100% 0 15px;
 }
 .card .card-title {
   margin: 0;
