@@ -869,8 +869,8 @@ button:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--border-color);
-  box-shadow: 0 5px 45px var(--border-color);
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 5px 45px rgba(255, 255, 255, 0.15);
 }
 .blueBg .box {
   position: relative;
@@ -896,7 +896,7 @@ button:hover {
 }
 
 .blueBg .box h2 {
-  color: var(--background-color);
+  color: #fff;
   font-size: 1.2em;
   font-weight: 500;
   margin-bottom: 10px;
@@ -909,8 +909,8 @@ button:hover {
 .blueBg .box button {
   cursor: pointer;
   padding: 10px 20px;
-  background: var(--background-color);
-  color: var(--main-background);
+  background: #fff;
+  color: #333;
   font-size: 16px;
   font-weight: 500;
   border: none;
@@ -921,13 +921,13 @@ button:hover {
   left: 0;
   width: 50%;
   height: 100%;
-  background: var(--background-color);
+  background: #fff;
   border-radius: 5px;
   z-index: 1000;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 5px 45px var(--border-color-deep);
+  box-shadow: 0 5px 45px rgba(255, 255, 255, 0.25);
   transition: 0.5s ease-in-out;
   overflow: hidden;
 }
@@ -997,7 +997,7 @@ button:hover {
   flex-direction: column;
 }
 .formBx .form h3 {
-  color: var(--main-background);
+  color: #333;
   font-size: 1.5em;
   font-weight: 500;
   margin-bottom: 20px;
@@ -1013,11 +1013,11 @@ button:hover {
   padding: 10px;
   outline: none;
   font-size: 16px;
-  border: 1px solid var(--main-background);
+  border: 1px solid #333;
 }
 .formBx .form input[type='button'] {
   background: #03a9f4;
-  color: var(--background-color);
+  color: #fff;
   cursor: pointer;
   border: none;
   min-width: 100px;
@@ -1026,7 +1026,7 @@ button:hover {
   background: #f43648;
 }
 .formBx .form .forgot {
-  color: var(--main-background);
+  color: #333;
   cursor: pointer;
   transition: 0.5s;
 }
@@ -1161,11 +1161,11 @@ button:hover {
   padding: 10px;
   outline: none;
   font-size: 16px;
-  border: 1px solid var(--main-background);
+  border: 1px solid #333;
 }
 .confirmEmail input[type='button'] {
   background: #ffca3a;
-  color: var(--background-color);
+  color: #fff;
   cursor: pointer;
   border: none;
   min-width: 100px;
@@ -1175,7 +1175,7 @@ button:hover {
   right: 0;
   bottom: 0;
   font-size: 16px;
-  color: var(--deep-color-8);
+  color: rgba(0, 0, 0, 0.8);
   margin-bottom: 30.25px;
   margin-right: 10px;
   opacity: 0;
@@ -1265,11 +1265,11 @@ button:hover {
   padding: 10px;
   outline: none;
   font-size: 16px;
-  border: 1px solid var(--main-background);
+  border: 1px solid #333;
 }
 .getPassword input[type='button'] {
   background: #03a9f4;
-  color: var(--background-color);
+  color: #fff;
   cursor: pointer;
   border: none;
   min-width: 100px;
@@ -1279,7 +1279,7 @@ button:hover {
   right: 0;
   bottom: 0;
   font-size: 16px;
-  color: var(--deep-color-8);
+  color: rgba(0, 0, 0, 0.8);
   margin-bottom: 30.25px;
   margin-right: 10px;
   opacity: 0;
