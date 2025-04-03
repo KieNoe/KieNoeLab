@@ -57,11 +57,11 @@ const labList = reactive([
         name: 'boxA',
         textContent: 'A',
         position: {
-          x: 400,
-          y: 200
+          x: 39,
+          y: 587
         },
         velocity: {
-          x: 0,
+          x: 10,
           y: 0
         },
         width: 80,
@@ -72,11 +72,11 @@ const labList = reactive([
         name: 'boxB',
         textContent: 'B',
         position: {
-          x: 450,
-          y: 50
+          x: 1165,
+          y: 587
         },
         velocity: {
-          x: 0,
+          x: -5,
           y: 0
         },
         width: 80,
@@ -231,7 +231,7 @@ onMounted(() => {
     labList[selectIndex.value].object.forEach((item, index) => {
       if (index < objects.length) {
         Matter.Body.setPosition(objects[index], { x: item.position.x, y: item.position.y })
-        Matter.Body.setVelocity(objects[index], { x: 0, y: 0 })
+        Matter.Body.setVelocity(objects[index], { x: item.velocity.x, y: item.velocity.y })
       }
     })
   }

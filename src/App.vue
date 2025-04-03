@@ -38,7 +38,7 @@ onMounted(() => {
   position: fixed; /* 改为 fixed 定位，相对于视口 */
   width: 20px;
   height: 20px;
-  background: rgba(0, 0, 0, 0.2); /* 背景色为半透明黑色 */
+  background: var(--border-color); /* 背景色为半透明黑色 */
   border-radius: 50%;
   transform: scale(0);
   animation: rippleEffect 0.6s linear;

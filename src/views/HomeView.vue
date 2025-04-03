@@ -64,7 +64,7 @@ const toNotification = () => {
     <labList :name="t('msg')" :toWhere="toLabList" />
     <div class="footer">
       <div class="txt">© 2025 KieNoeLab 保留所有权利</div>
-      <div class="txt">苏A093JDU8261号</div>
+      <div class="txt">苏ICP备2025171457号</div>
     </div>
   </div>
 </template>

@@ -18,50 +18,44 @@ const bookList = [
     id: '18eg40',
     tag: '高一',
     subject: '力学',
-    title: '牛顿第二定律',
-    imgName: 'swap-horizontal-outline'
+    title: '牛顿第二定律'
   },
   {
     id: '18eg41',
     tag: '高一',
     subject: '力学',
-    title: '牛顿第二定律',
-    imgName: 'swap-horizontal-outline'
+    title: '牛顿第二定律'
   },
   {
     id: '18eg42',
     tag: '高一',
     subject: '力学',
-    title: '牛顿第二定律',
-    imgName: 'swap-horizontal-outline'
+    title: '牛顿第二定律'
   },
   {
     id: '18eg43',
     tag: '高一',
     subject: '力学',
-    title: '牛顿第二定律',
-    imgName: 'swap-horizontal-outline'
+    title: '牛顿第二定律'
   },
   {
     id: '18eg44',
     tag: '高一',
     subject: '力学',
-    title: '牛顿第二定律',
-    imgName: 'swap-horizontal-outline'
+    title: '牛顿第二定律'
   },
   {
     id: '18eg45',
     tag: '高一',
     subject: '力学',
-    title: '牛顿第二定律',
-    imgName: 'swap-horizontal-outline'
+    title: '牛顿第二定律'
   }
 ]
 onMounted(() => {
-  VanillaTilt.init(Array.from(document.querySelectorAll('.card')), {
+  VanillaTilt.init(Array.from(document.querySelectorAll('.tilt-wrapper')), {
     max: 15,
     speed: 400,
-    glare: false
+    glare: true
   })
 })
 </script>
@@ -76,23 +70,21 @@ onMounted(() => {
     <el-card :body-style="{ padding: '0' }">
       <ul>
         <li v-for="item in bookList" :key="item.id">
-          <div class="card">
-            <RouterLink to="./lab" class="router-link">
-              <div class="imgBx">
-                <ion-icon :name="item.imgName"></ion-icon></div
-            ></RouterLink>
-            <div class="detail">
+          <!-- 外层容器用于 VanillaTilt -->
+          <div class="tilt-wrapper">
+            <div class="card">
               <RouterLink to="./lab" class="router-link">
-                <div class="txt">{{ item.title }}</div></RouterLink
-              >
-              <div class="tags">
-                <RouterLink to="./lab" class="router-link">
-                  <div class="tag">{{ item.tag }}</div></RouterLink
-                >
-                <RouterLink to="./lab" class="router-link">
-                  <div class="tag subject">{{ item.subject }}</div></RouterLink
-                >
-              </div>
+                <img src="/images/experiments/动量守恒定律.png" />
+                <div class="content">
+                  <p class="card-title">动量守恒定律</p>
+                  <p class="description">
+                    如果物体受到外力的合力为零，则系统内各物体动量的向量和保持不变，系统质心维持其原本的运动状态
+                  </p>
+                  <p class="description">
+                    迄今物理学界公认，无论会有何种形式物质发现，动量守恒定律将仍然成立。
+                  </p>
+                </div>
+              </RouterLink>
             </div>
           </div>
         </li>
@@ -150,95 +142,62 @@ onMounted(() => {
   flex-wrap: wrap;
   justify-content: space-between;
   list-style: none;
-  transition: 0.5s ease-in-out;
+  transition: 0.5s;
   background: var(--background-color);
+}
+.tilt-wrapper {
+  transition: none !important;
+  transform-style: preserve-3d;
 }
 .labList .card {
-  width: 300px;
-  height: 250px;
-  margin: 10px 25px;
-  overflow: hidden;
-  display: flex;
-  border-radius: 5px;
-  flex-direction: column;
-  transform-style: preserve-3d;
-  box-shadow: 0 5px 20px var(--hover-color);
-  transition:
-    width 0.5s ease-in-out,
-    height 0.5s ease-in-out;
-}
-.labList .card:hover {
-  width: 330px;
-  height: 280px;
-}
-.labList .card .imgBx {
+  position: relative;
   width: 300px;
   height: 200px;
-  background: #bde0fe;
+  border-radius: 10px;
+  margin: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transform-style: preserve-3d;
-  transition: 0.5s;
+  transition: 0;
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
-.labList .card:hover .imgBx {
-  width: 330px;
-  height: 230px;
+.card:hover {
+  transform: rotate(-5deg) scale(1.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
-.labList .card .imgBx ion-icon {
-  font-size: 100px;
-  color: var(--background-color);
-  transition: 0.5s ease-in-out;
-}
-.labList .card:hover .imgBx ion-icon {
-  transform: rotate(-45deg) scale(1.2);
-}
-.labList .card .detail {
+.card img {
   width: 100%;
-  height: 50px;
-  background: var(--background-color);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 10px;
+  height: 100%;
+  object-fit: cover;
+}
+.content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  width: 100%;
+  height: 100%;
+  padding: 20px;
   box-sizing: border-box;
-  transition: 0.5s ease-in-out;
+  background-color: #fff;
+  opacity: 0;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
-.labList .card .detail .router-link {
-  text-decoration: none;
-  transition: 0.5s ease-in-out;
+.card:hover .content {
+  transform: translate(-50%, -50%) rotate(0deg);
+  opacity: 1;
 }
-.labList .card .detail .txt {
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--border-color-deep);
-  text-decoration: none;
-  transition: 0.5s ease-in-out;
+.card .card-title {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+  font-weight: 700;
 }
-.labList .card .detail .tags {
-  display: flex;
-  gap: 10px;
-}
-.labList .card .detail .tag.subject {
-  background: #ff9f1c;
-  border: none;
-}
-.labList .card .detail .tag {
-  width: 70px;
-  height: 30px;
-  border-radius: 3px;
-  border: 1px solid var(--border-color-deep);
-  font-size: 15px;
-  font-weight: 400;
-  border: none;
-  color: var(--background-color);
-  background: #00b4d8;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
-  transition: 0.5s ease-in-out;
+.description {
+  margin: 10px 0 0;
+  font-size: 14px;
+  color: #777;
+  line-height: 1.4;
 }
 </style>
