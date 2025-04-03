@@ -98,6 +98,20 @@ const resetUserPassword = () => {
   )
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+function debounce(fn: Function, delay: number) {
+  let timer: ReturnType<typeof setTimeout> | null = null // 用来存储定时器的ID
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return function (this: any, ...args: any[]) {
+    if (timer) {
+      clearTimeout(timer)
+    }
+    timer = setTimeout(() => {
+      fn.apply(this, args)
+    }, delay)
+  }
+}
+
 // 错误提示信息存储
 const usernameError = ref('') // 用户名错误提示
 const emailError = ref('') // 邮箱错误提示
@@ -206,7 +220,7 @@ const emailConfirmError = () => {
  * 注册表单提交
  * 验证所有字段，全部通过后标记注册成功
  */
-const submitForm = () => {
+const submitForm = debounce(() => {
   validateUsername()
   validateEmail()
   validatePassword()
@@ -235,13 +249,13 @@ const submitForm = () => {
         ElMessage.error(error.message)
       })
   }
-}
+}, 500)
 
 /**
  * 登录表单提交
  * 验证登录信息，成功后跳转到个人页面
  */
-const loginForm = () => {
+const loginForm = debounce(() => {
   if (
     loginId.value === import.meta.env.VITE_ROOT_USER_ID &&
     loginPassword.value === import.meta.env.VITE_ROOT_USER_PASSWORD
@@ -301,7 +315,7 @@ const loginForm = () => {
         })
     }
   }
-}
+}, 500)
 const loginPasswordInput = ref<HTMLInputElement | null>(null)
 const emailInput = ref<HTMLInputElement | null>(null)
 const passwordInput = ref<HTMLInputElement | null>(null)
@@ -409,7 +423,7 @@ const resendVerificationCode = () => {
  * 验证邮箱验证码
  * 验证成功后进行登录并跳转
  */
-const verifyEmailCode = () => {
+const verifyEmailCode = debounce(() => {
   if (emailConfirmError()) {
     verifyRegisterEmailCode()
       .send()
@@ -455,7 +469,7 @@ const verifyEmailCode = () => {
     getShake()
     isVerificationSuccessful.value = false
   }
-}
+}, 500)
 
 // UI交互函数
 /**
@@ -476,7 +490,7 @@ const toggleAuthView = () => {
  * 处理忘记密码流程
  * 验证邮箱后打开验证模态框
  */
-const toggleForgotPassword = () => {
+const toggleForgotPassword = debounce(() => {
   if (!loginId.value) {
     loginIdError.value = '请输入邮箱'
     getShake()
@@ -502,13 +516,13 @@ const toggleForgotPassword = () => {
         ElMessage.error(error.message)
       })
   }
-}
+}, 500)
 
 /**
  * 确认邮箱验证
  * 验证成功后打开重置密码模态框
  */
-const confirmEmailVerification = () => {
+const confirmEmailVerification = debounce(() => {
   if (emailConfirmError()) {
     verifyResetPasswordEmailCode()
       .send()
@@ -529,13 +543,13 @@ const confirmEmailVerification = () => {
   } else {
     getShake()
   }
-}
+}, 500)
 
 /**
  * 重置密码
  * 验证新密码后更新用户信息
  */
-const resetPassword = () => {
+const resetPassword = debounce(() => {
   validatePassword()
   validateConfirmPassword()
   if (!passwordError.value && !confirmPasswordError.value) {
@@ -563,7 +577,7 @@ const resetPassword = () => {
   } else {
     getShake()
   }
-}
+}, 500)
 
 // 动画效果控制
 const isShaking = ref(false) // 控制整体抖动效果

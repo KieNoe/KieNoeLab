@@ -4,7 +4,7 @@ import adapterFetch from 'alova/fetch'
 import { ElMessage } from 'element-plus'
 
 const request = createAlova({
-  baseURL: `http://${import.meta.env.VITE_API_BASE_URL}`, // 使用环境变量
+  baseURL: `${import.meta.env.VITE_API_BASE_URL}`, // 使用环境变量
   statesHook: VueHook,
   requestAdapter: adapterFetch(),
   beforeRequest(method) {
