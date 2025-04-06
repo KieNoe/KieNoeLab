@@ -18,11 +18,6 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue')
     },
     {
-      path: '/control',
-      name: 'control',
-      component: () => import('../views/ControlView.vue')
-    },
-    {
       path: '/feedback',
       name: 'feedback',
       component: () => import('../views/FeedbackView.vue')
@@ -31,11 +26,6 @@ const router = createRouter({
       path: '/help',
       name: 'help',
       component: () => import('../views/HelpView.vue')
-    },
-    {
-      path: '/landing',
-      name: 'landing',
-      component: () => import('../views/LandingView.vue')
     },
     {
       path: '/login',
@@ -59,7 +49,7 @@ const router = createRouter({
       component: () => import('../views/SettingView.vue')
     },
     {
-      path: '/lab',
+      path: '/lab/:experimentID',
       name: 'lab',
       component: () => import('../views/LabView.vue'),
       meta: { requiresAuth: true }
@@ -70,10 +60,9 @@ const router = createRouter({
       component: () => import('../views/LabListView.vue')
     },
     {
-      path: '/history',
-      name: 'history',
-      component: () => import('../views/HistoryView.vue'),
-      meta: { requiresAuth: true }
+      path: '/freeLab',
+      name: 'freeLab',
+      component: () => import('../views/FreeLabView.vue')
     }
   ]
 })

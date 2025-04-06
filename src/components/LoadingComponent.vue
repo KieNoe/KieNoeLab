@@ -32,6 +32,7 @@ watch(
 </template>
 <style scoped>
 .loading {
+  will-change: transform;
   position: fixed;
   box-sizing: border-box;
   width: 100%;

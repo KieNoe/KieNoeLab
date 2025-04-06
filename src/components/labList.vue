@@ -15,47 +15,67 @@ defineProps({
 })
 const bookList = [
   {
-    id: '18eg40',
+    id: 'SeniorPhysicsExperiment-0',
     tag: '高一',
     subject: '力学',
-    title: '牛顿第二定律'
+    title: '动量守恒',
+    iconName: 'podium-outline',
+    experimentID: 0
   },
   {
-    id: '18eg41',
+    id: 'SeniorPhysicsExperiment-1',
     tag: '高一',
     subject: '力学',
-    title: '牛顿第二定律'
+    title: '自由落体',
+    iconName: 'bowling-ball-outline',
+    experimentID: 1
   },
   {
-    id: '18eg42',
+    id: 'SeniorPhysicsExperiment-2',
     tag: '高一',
     subject: '力学',
-    title: '牛顿第二定律'
+    title: '斜面运动',
+    iconName: 'trending-down-outline',
+    experimentID: 2
   },
   {
-    id: '18eg43',
+    id: 'SeniorPhysicsExperiment-3',
     tag: '高一',
     subject: '力学',
-    title: '牛顿第二定律'
+    title: '弹簧振子',
+    iconName: 'pulse-outline',
+    experimentID: 3
   },
   {
-    id: '18eg44',
+    id: 'SeniorPhysicsExperiment-4',
     tag: '高一',
     subject: '力学',
-    title: '牛顿第二定律'
+    title: '杠杆原理',
+    iconName: 'pin-outline',
+    experimentID: 4
   },
   {
-    id: '18eg45',
+    id: 'SeniorPhysicsExperiment-5',
     tag: '高一',
     subject: '力学',
-    title: '牛顿第二定律'
+    title: '圆周运动',
+    iconName: 'reload-circle-outline',
+    experimentID: 5
+  },
+  {
+    id: 'SeniorPhysicsExperiment-6',
+    tag: '高一',
+    subject: '力学',
+    title: '摆锤实验',
+    iconName: 'git-merge-outline',
+    experimentID: 6
   }
 ]
 onMounted(() => {
   VanillaTilt.init(Array.from(document.querySelectorAll('.tilt-wrapper')), {
     max: 15,
     speed: 400,
-    glare: true
+    glare: false
   })
 })
 </script>
@@ -70,21 +90,23 @@ onMounted(() => {
     <el-card :body-style="{ padding: '0' }">
       <ul>
         <li v-for="item in bookList" :key="item.id">
-          <!-- 外层容器用于 VanillaTilt -->
           <div class="tilt-wrapper">
             <div class="card">
-              <RouterLink to="./lab" class="router-link">
-                <img src="/images/experiments/动量守恒定律.png" />
-                <div class="content">
-                  <p class="card-title">动量守恒定律</p>
-                  <p class="description">
-                    如果物体受到外力的合力为零，则系统内各物体动量的向量和保持不变，系统质心维持其原本的运动状态
-                  </p>
-                  <p class="description">
-                    迄今物理学界公认，无论会有何种形式物质发现，动量守恒定律将仍然成立。
-                  </p>
+              <RouterLink
+                :to="{ name: 'lab', params: { experimentID: item.experimentID } }"
+                class="router-link"
+              >
+                <div class="first-content">
+                  <ion-icon :name="item.iconName"></ion-icon>
+                  <span>{{ item.title }}</span>
                 </div>
-              </RouterLink>
+                <div class="second-content">
+                  <ion-icon name="cube-outline"></ion-icon></div
+              ></RouterLink>
+              <div class="blob"></div>
+              <div class="blob"></div>
+              <div class="blob"></div>
+              <div class="blob"></div>
             </div>
           </div>
         </li>
@@ -140,7 +162,7 @@ onMounted(() => {
 .labList ul {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
   list-style: none;
   transition: 0.5s;
   background: var(--background-color);
@@ -148,85 +170,125 @@ onMounted(() => {
 .tilt-wrapper {
   transition: none !important;
   transform-style: preserve-3d;
-}
-.labList .card {
-  position: relative;
-  width: 300px;
-  height: 200px;
-  border-radius: 10px;
-  margin: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  transition: 0;
-  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-}
-.card:hover {
-  transform: rotate(-5deg) scale(1.1);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
-.card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-45deg);
-  width: 100%;
-  height: 100%;
-  padding: 20px;
-  box-sizing: border-box;
-  background-color: #fff;
-  opacity: 0;
-  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-}
-.content p {
-  z-index: 2;
-}
-.card:hover .content {
-  transform: translate(-50%, -50%) rotate(0deg);
-  opacity: 1;
-}
-.content::before,
-.content::after {
-  position: absolute;
-  content: '';
-  width: 20%;
-  height: 20%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 25px;
-  font-weight: bold;
-  background-color: rgba(189, 224, 254, 0.5);
-  transition: all 0.5s;
-  z-index: 0;
-}
-.content::after {
-  top: 0;
-  right: 0;
-  border-radius: 0 15px 0 100%;
+  padding: 30px 17px;
 }
 
-.content::before {
-  bottom: 0;
-  left: 0;
-  border-radius: 0 100% 0 15px;
+.card {
+  position: relative;
+  width: 190px;
+  height: 254px;
+  transition: all 0.4s;
+  border-radius: 10px;
+  font-size: 30px;
+  text-decoration: none;
+  overflow: hidden;
+  z-index: 1;
+  background: lightgrey;
+  box-shadow: #cdb4db 0 15px 40px -5px;
 }
-.card .card-title {
-  margin: 0;
-  font-size: 24px;
-  color: #333;
+
+.card:hover {
+  border-radius: 15px;
+  cursor: pointer;
+  transform: scale(1.2);
+  background: #8ecae6;
+  transform: rotate(-5deg);
+}
+
+.card .router-link {
+  text-decoration: none;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 1;
+}
+
+.first-content {
+  height: 100%;
+  width: 100%;
+  transition: all 0.4s;
+  display: flex;
+  justify-content: center;
   font-weight: 700;
+  align-items: center;
+  flex-direction: column;
+  opacity: 1;
+  border-radius: 15px;
 }
-.description {
-  margin: 10px 0 0;
-  font-size: 14px;
-  color: #777;
-  line-height: 1.4;
+.first-content ion-icon {
+  font-size: 70px;
+  margin-bottom: 10px;
+}
+
+.card:hover .first-content {
+  height: 0px;
+  opacity: 0;
+}
+
+.second-content {
+  height: 0%;
+  width: 100%;
+  opacity: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 15px;
+  transition: all 0.4s;
+  color: white;
+  font-size: 0px;
+  transform: translateY(200px);
+}
+
+.second-content ion-icon {
+  font-size: 70px;
+  animation: rotate 5s linear infinite;
+}
+.card:hover .second-content {
+  opacity: 1;
+  height: 100%;
+  font-size: 16px;
+  transform: translateY(0px);
+}
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.card .blob {
+  position: absolute;
+  z-index: -1;
+  border-radius: 5em;
+  width: 200px;
+  height: 200px;
+}
+
+.card .blob:nth-child(2) {
+  left: -50px;
+  top: -90px;
+  background: #fcf6bd;
+}
+
+.card .blob:nth-child(3) {
+  left: 110px;
+  top: -20px;
+  z-index: -1;
+  background: #e4c1f9;
+}
+
+.card .blob:nth-child(4) {
+  left: -40px;
+  top: 100px;
+  background: #ff99c8;
+}
+
+.card .blob:nth-child(5) {
+  left: 100px;
+  top: 180px;
+  background: #a9def9;
 }
 </style>

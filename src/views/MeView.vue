@@ -47,7 +47,7 @@ onMounted(() => {
     </div>
 
     <!-- 历史记录 -->
-    <labList :name="msg" :toWhere="history" />
+    <labList :name="msg" :toWhere="history" :ifMore="false" />
   </div>
 </template>
 

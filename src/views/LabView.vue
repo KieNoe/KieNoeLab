@@ -3,6 +3,7 @@ import Matter from 'matter-js'
 import { ref, onMounted, watch, reactive, onUnmounted, nextTick } from 'vue'
 import 'mathjax/es5/tex-mml-chtml.js'
 import { useLabStore } from '@/stores/labStore'
+import { useRoute } from 'vue-router'
 
 const labStore = useLabStore()
 const containerRef = ref<HTMLElement | null>(null)
@@ -84,14 +85,258 @@ const labList = reactive([
         isStatic: false
       }
     ]
+  },
+  {
+    name: '自由落体',
+    description: '物体在重力作用下自由下落，其加速度等于重力加速度，与物体质量无关',
+    formula: '$$ h = \\frac{1}{2}gt^2 $$',
+    object: [
+      {
+        name: 'ball',
+        textContent: 'A',
+        position: {
+          x: 600,
+          y: 100
+        },
+        velocity: {
+          x: 0,
+          y: 0
+        },
+        width: 50,
+        height: 50,
+        isStatic: false
+      }
+    ]
+  },
+  {
+    name: '斜面运动',
+    description: '物体在斜面上运动时，受到平行于斜面的分力作用，导致物体沿斜面加速运动',
+    formula: '$$ a = g\\sin\\theta $$',
+    object: [
+      {
+        name: 'slope',
+        textContent: 'A',
+        position: {
+          x: 600,
+          y: 500
+        },
+        velocity: {
+          x: 0,
+          y: 0
+        },
+        width: 800,
+        height: 20,
+        isStatic: true,
+        angle: 0.3 // 约17度斜面
+      },
+      {
+        name: 'box',
+        textContent: 'B',
+        position: {
+          x: 300,
+          y: 400
+        },
+        velocity: {
+          x: 0,
+          y: 0
+        },
+        width: 50,
+        height: 50,
+        isStatic: false
+      }
+    ]
+  },
+  {
+    name: '弹簧振子',
+    description: '弹簧振子在弹性力作用下做简谐运动，其周期与弹簧刚度和物体质量有关',
+    formula: '$$ T = 2\\pi\\sqrt{\\frac{m}{k}} $$',
+    object: [
+      {
+        name: 'anchor',
+        textContent: '',
+        position: {
+          x: 600,
+          y: 100
+        },
+        velocity: {
+          x: 0,
+          y: 0
+        },
+        width: 50,
+        height: 50,
+        isStatic: true
+      },
+      {
+        name: 'weight',
+        textContent: 'A',
+        position: {
+          x: 400,
+          y: 180
+        },
+        velocity: {
+          x: 0,
+          y: 0
+        },
+        width: 60,
+        height: 60,
+        isStatic: false
+      }
+    ]
+  },
+  {
+    name: '杠杆原理',
+    description: '杠杆是一种简单机械，当杠杆平衡时，力臂与力的乘积在杠杆两侧相等',
+    formula: '$$ F_1 \\cdot d_1 = F_2 \\cdot d_2 $$',
+    object: [
+      {
+        name: 'lever',
+        textContent: 'A',
+        position: {
+          x: 600,
+          y: 400
+        },
+        velocity: {
+          x: 0,
+          y: 0
+        },
+        width: 1200,
+        height: 20,
+        isStatic: false
+      },
+      {
+        name: 'fulcrum',
+        textContent: 'B',
+        position: {
+          x: 600,
+          y: 430
+        },
+        velocity: {
+          x: 0,
+          y: 0
+        },
+        width: 30,
+        height: 30,
+        isStatic: true
+      },
+      {
+        name: 'weight1',
+        textContent: 'W1',
+        position: {
+          x: 400,
+          y: 350
+        },
+        velocity: {
+          x: 0,
+          y: 0
+        },
+        width: 50,
+        height: 50,
+        isStatic: false
+      },
+      {
+        name: 'weight2',
+        textContent: 'W2',
+        position: {
+          x: 650,
+          y: 350
+        },
+        velocity: {
+          x: 0,
+          y: 0
+        },
+        width: 100,
+        height: 100,
+        isStatic: false
+      }
+    ]
+  },
+  {
+    name: '圆周运动',
+    description: '物体做圆周运动时，需要向心力使物体保持在圆周轨道上，向心力与速度平方成正比',
+    formula: '$$ F = \\frac{mv^2}{r} $$',
+    object: [
+      {
+        name: 'center',
+        textContent: '中心',
+        position: {
+          x: 600,
+          y: 400
+        },
+        velocity: {
+          x: 0,
+          y: 0
+        },
+        width: 30,
+        height: 30,
+        isStatic: true
+      },
+      {
+        name: 'orbiter',
+        textContent: '物体',
+        position: {
+          x: 800,
+          y: 400
+        },
+        velocity: {
+          x: 0,
+          y: 10
+        },
+        width: 40,
+        height: 40,
+        isStatic: false
+      }
+    ]
+  },
+  {
+    name: '摆锤实验',
+    description: '单摆在重力作用下做周期运动，其周期与摆长有关，与摆锤质量无关',
+    formula: '$$ T = 2\\pi\\sqrt{\\frac{L}{g}} $$',
+    object: [
+      {
+        name: 'anchor',
+        textContent: 'A',
+        position: {
+          x: 600,
+          y: 100
+        },
+        velocity: {
+          x: 0,
+          y: 0
+        },
+        width: 20,
+        height: 20,
+        isStatic: true
+      },
+      {
+        name: 'pendulum',
+        textContent: '摆锤',
+        position: {
+          x: 700,
+          y: 300
+        },
+        velocity: {
+          x: 0,
+          y: 0
+        },
+        width: 60,
+        height: 60,
+        isStatic: false
+      }
+    ]
   }
 ])
 const objects = reactive<Matter.Body[]>([]) // 明确类型为 Matter.Body 数组
-const selectIndex = ref(0)
+const route = useRoute()
+// 修改这一行，添加默认值和验证
+const selectIndex = ref<number>(
+  isNaN(Number(route.params.experimentID)) || Number(route.params.experimentID) >= labList.length
+    ? 0
+    : Number(route.params.experimentID)
+)
 
 // 设置当前实验的文本和公式
 const setCurrentLabInfo = () => {
-  const currentLab = labList[selectIndex.value]
+  const currentLab = labList[selectIndex.value || 0]
   text.value = currentLab.description || ''
   formula.value = currentLab.formula || ''
   nextTick(() => renderMath())
@@ -167,7 +412,7 @@ onMounted(() => {
   })
 
   // 创建边界
-  const thickness = 20
+  const thickness = 100
   const ground = Bodies.rectangle(width / 2, height + thickness / 2, width, thickness, {
     isStatic: true,
     friction: friction.value
@@ -199,7 +444,71 @@ onMounted(() => {
 
   // 将所有物体添加到世界中
   Composite.add(engine.world, [...objects, ground, ceiling, leftWall, rightWall, mouseConstraint])
+  // 在 onMounted 函数中，在创建实验物体后添加以下代码
+  // 在 "创建实验物体" 部分之后添加
 
+  // 为特殊实验添加约束
+  if (labList[selectIndex.value].name === '弹簧振子') {
+    // 创建弹簧约束
+    const spring = Matter.Constraint.create({
+      pointA: { x: objects[0].position.x, y: objects[0].position.y },
+      bodyB: objects[1],
+      stiffness: 0.01,
+      damping: 0.1,
+      length: 200,
+      render: {
+        visible: true,
+        lineWidth: 2,
+        strokeStyle: '#4a4a4a'
+      }
+    })
+    Composite.add(engine.world, spring)
+  } else if (labList[selectIndex.value].name === '圆周运动') {
+    // 创建圆周运动约束
+    const constraint = Matter.Constraint.create({
+      pointA: { x: objects[0].position.x, y: objects[0].position.y },
+      bodyB: objects[1],
+      stiffness: 1,
+      length: 200,
+      render: {
+        visible: true,
+        lineWidth: 2,
+        strokeStyle: '#4a4a4a'
+      }
+    })
+    Composite.add(engine.world, constraint)
+  } else if (labList[selectIndex.value].name === '摆锤实验') {
+    // 创建摆锤约束
+    const pendulum = Matter.Constraint.create({
+      pointA: { x: objects[0].position.x, y: objects[0].position.y },
+      bodyB: objects[1],
+      stiffness: 1,
+      length: 200,
+      render: {
+        visible: true,
+        lineWidth: 2,
+        strokeStyle: '#4a4a4a'
+      }
+    })
+    Composite.add(engine.world, pendulum)
+  } else if (labList[selectIndex.value].name === '斜面运动') {
+    // 设置斜面角度
+    Matter.Body.setAngle(objects[0], objects[0].angle || 0.3)
+  } else if (labList[selectIndex.value].name === '杠杆原理') {
+    // 创建杠杆支点约束
+    const pivot = Matter.Constraint.create({
+      pointA: { x: objects[1].position.x, y: objects[1].position.y },
+      bodyB: objects[0],
+      stiffness: 1,
+      length: 0,
+      render: {
+        visible: true,
+        lineWidth: 2,
+        strokeStyle: '#4a4a4a'
+      }
+    })
+    Composite.add(engine.world, pivot)
+  }
   // 执行渲染操作
   Render.run(render)
 
@@ -413,7 +722,7 @@ onUnmounted(() => {
 .parameter-title {
   font-size: 24px;
   margin-bottom: 30px;
-  color: var(--main-background);
+  color: var(--text-color);
   text-align: center;
 }
 
@@ -427,7 +736,7 @@ onUnmounted(() => {
 .object-params h3 {
   font-size: 18px;
   margin-bottom: 20px;
-  color: var(--main-color-666);
+  color: var(--text-color);
   cursor: default;
   transition: 0.5s;
 }
@@ -451,7 +760,7 @@ onUnmounted(() => {
 .param-label {
   display: block;
   margin-bottom: 8px;
-  color: var(--main-color-666);
+  color: var(--text-color);
 }
 
 .param-switches {
@@ -477,6 +786,7 @@ onUnmounted(() => {
 .positionShow {
   background-color: var(--more-color-2);
   border-radius: 12px;
+  color: var(--text-color);
   padding: 15px;
   height: 84px;
   margin-bottom: 15px;
@@ -487,11 +797,12 @@ onUnmounted(() => {
 .speedShow {
   background-color: var(--more-color-2);
   border-radius: 12px;
+  color: var(--text-color);
   padding: 15px;
   height: 84px;
   margin-bottom: 15px;
   overflow: hidden;
-  transition: 0.8s;
+  transition: 0.5s;
 }
 .positionShow:hover,
 .speedShow:hover {
@@ -523,7 +834,7 @@ onUnmounted(() => {
   margin-top: 10px;
   display: flex;
   justify-content: space-between;
-  color: var(--main-color-666);
+  color: var(--text-color);
 }
 
 .value {
@@ -538,7 +849,7 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: var(--background-color);
+  color: #fff;
 }
 .paramLists ul {
   display: flex;
@@ -564,13 +875,13 @@ onUnmounted(() => {
   left: 0;
   margin-left: 40px;
   max-width: 500px;
-  background: var(--color-01);
+  background: rgba(0, 0, 0, 0.1);
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  color: var(--background-color);
+  color: #fff;
   transition: 0.5s;
   cursor: default;
   transform: translateY(-100%);

@@ -108,7 +108,7 @@ onMounted(() => {
   <div class="navigation" ref="navigation">
     <div class="menuToggle"></div>
     <div class="square" ref="square" @click="toggleSquare"></div>
-    <ul v-show="route.name !== 'lab'" class="notOnLab">
+    <ul v-show="route.name !== 'lab' && route.name !== 'freeLab'" class="notOnLab">
       <li class="list home active" style="--clr: #f44336">
         <RouterLink ref="router-link" to="/" class="router-link">
           <span class="icon"><ion-icon name="home-outline"></ion-icon></span>
@@ -141,32 +141,35 @@ onMounted(() => {
       </li>
     </ul>
 
-    <ul v-show="route.name === 'lab'" class="onLab">
+    <ul v-show="route.name === 'lab' || route.name === 'freeLab'" class="onLab">
       <li class="list start" style="--clr: #f44336" @click="labStore.toggleLab()">
-        <RouterLink ref="router-link" to="/lab" class="router-link">
+        <a ref="router-link" class="router-link">
           <span class="icon"><ion-icon name="power-outline"></ion-icon></span>
           <span class="text">重置事件</span>
-        </RouterLink>
+        </a>
       </li>
       <li class="list comment" style="--clr: #2196f3">
-        <RouterLink
-          ref="router-link"
-          to="/lab"
-          class="router-link"
-          @click="labStore.toggleTextModel()"
-        >
-          <span class="icon"><ion-icon name="chatbox-outline"></ion-icon></span>
+        <a ref="router-link" class="router-link" @click="labStore.toggleTextModel()">
+          <span class="icon"
+            ><ion-icon
+              :name="route.name === 'lab' ? 'chatbox-outline' : 'add-circle-outline'"
+            ></ion-icon
+          ></span>
           <span class="text">注释</span>
-        </RouterLink>
+        </a>
       </li>
       <li class="list parameter" style="--clr: #b145e9" @click="labStore.toggleParameterModel()">
-        <RouterLink ref="router-link" to="/lab" class="router-link">
+        <a ref="router-link" class="router-link">
           <span class="icon"><ion-icon name="cog-outline"></ion-icon></span>
           <span class="text">参数调整</span>
-        </RouterLink>
+        </a>
       </li>
       <li class="list changeMod" style="--clr: #0fc70f">
-        <RouterLink ref="router-link" to="/lab" class="router-link">
+        <RouterLink
+          :to="route.name === 'freeLab' ? '/lab/0' : '/freeLab'"
+          ref="router-link"
+          class="router-link"
+        >
           <span class="icon"><ion-icon name="swap-horizontal-outline"></ion-icon></span>
           <span class="text">模式转换</span>
         </RouterLink>
