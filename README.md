@@ -9,7 +9,10 @@
 - Vite：现代前端构建工具
 - Vue Router：路由管理
 - Pinia：状态管理
-- ESLint：代码规范检查
+- Element Plus：UI组件库
+- Alova：请求管理库
+- Vue I18n：国际化支持
+- ESLint & Prettier：代码规范检查与格式化
 
 ## 推荐的IDE设置
 
