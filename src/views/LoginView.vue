@@ -253,7 +253,7 @@ const submitForm = debounce(async () => {
 
 /**
  * 登录表单提交
- * 验证登录信息，成功后跳转到个人页面
+ * 验证登录信息，成功后跳转至个人页面
  */
 const loginForm = debounce(async () => {
   if (
