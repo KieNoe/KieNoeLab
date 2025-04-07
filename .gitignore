@@ -7,7 +7,6 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-.env
 node_modules
 .DS_Store
 dist
@@ -29,3 +28,11 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.test
