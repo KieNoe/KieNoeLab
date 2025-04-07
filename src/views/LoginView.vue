@@ -220,34 +220,34 @@ const emailConfirmError = () => {
  * 注册表单提交
  * 验证所有字段，全部通过后标记注册成功
  */
-const submitForm = debounce(() => {
+const submitForm = debounce(async () => {
   validateUsername()
   validateEmail()
   validatePassword()
   validateConfirmPassword()
+
   if (
     !usernameError.value &&
     !emailError.value &&
     !passwordError.value &&
     !confirmPasswordError.value
   ) {
-    getRegisterVerificationCode()
-      .send()
-      .then((res) => {
-        if (!('error' in (res as { error: string }))) {
-          resendVerificationCode()
-          ElMessage.success((res as { message: string }).message)
-          isRegistrationSuccessful.value = true
-        } else {
-          ElMessage.error(
-            (res as { message: string }).message + ':' + (res as { error: string }).error
-          )
-        }
-      })
-      .catch((error) => {
-        getShake()
-        ElMessage.error(error.message)
-      })
+    try {
+      const res = await getRegisterVerificationCode().send()
+
+      if (!('error' in (res as { error: string }))) {
+        resendVerificationCode()
+        ElMessage.success((res as { message: string }).message)
+        isRegistrationSuccessful.value = true
+      } else {
+        ElMessage.error(
+          (res as { message: string }).message + ':' + (res as { error: string }).error
+        )
+      }
+    } catch (error) {
+      getShake()
+      ElMessage.error((error as Error).message)
+    }
   }
 }, 500)
 
@@ -255,7 +255,7 @@ const submitForm = debounce(() => {
  * 登录表单提交
  * 验证登录信息，成功后跳转到个人页面
  */
-const loginForm = debounce(() => {
+const loginForm = debounce(async () => {
   if (
     loginId.value === import.meta.env.VITE_ROOT_USER_ID &&
     loginPassword.value === import.meta.env.VITE_ROOT_USER_PASSWORD
@@ -286,33 +286,31 @@ const loginForm = debounce(() => {
       loginPasswordError.value = ''
     }
     if (!loginIdError.value && !loginPasswordError.value) {
-      login()
-        .send()
-        .then((res) => {
-          if (!('error' in (res as { error: string }))) {
-            ElMessage.success((res as { message: string }).message)
-            isResetPasswordModalOpen.value = false
-            isVerificationSuccessful.value = true
-            userInfo = {
-              name: (res as { user: { name: string } }).user.name,
-              email: loginId.value,
-              password: loginPassword.value,
-              id: (res as { user: { id: string } }).user.id
-            }
-            localStorage.setItem('token', (res as { token: string }).token)
-            setTimeout(() => {
-              userStore.login(userInfo)
-              router.push('/me')
-            }, 2000)
-          } else {
-            ElMessage.error(
-              (res as { message: string }).message + ':' + (res as { error: string }).error
-            )
+      try {
+        const res = await login().send()
+        if (!('error' in (res as { error: string }))) {
+          ElMessage.success((res as { message: string }).message)
+          isResetPasswordModalOpen.value = false
+          isVerificationSuccessful.value = true
+          userInfo = {
+            name: (res as { user: { name: string } }).user.name,
+            email: loginId.value,
+            password: loginPassword.value,
+            id: (res as { user: { id: string } }).user.id
           }
-        })
-        .catch((error) => {
-          ElMessage.error(error.message)
-        })
+          localStorage.setItem('token', (res as { token: string }).token)
+          setTimeout(() => {
+            userStore.login(userInfo)
+            router.push('/me')
+          }, 2000)
+        } else {
+          ElMessage.error(
+            (res as { message: string }).message + ':' + (res as { error: string }).error
+          )
+        }
+      } catch (error) {
+        ElMessage.error((error as Error).message)
+      }
     }
   }
 }, 500)
