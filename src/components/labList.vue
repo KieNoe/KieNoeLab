@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { onMounted } from 'vue'
 import VanillaTilt from 'vanilla-tilt'
 import { useI18n } from 'vue-i18n'
 
@@ -71,14 +70,23 @@ const bookList = [
     experimentID: 6
   }
 ]
-onMounted(() => {
-  VanillaTilt.init(Array.from(document.querySelectorAll('.tilt-wrapper')), {
+// 添加倾斜效果处理函数
+const initTilt = (element: HTMLElement) => {
+  VanillaTilt.init(element, {
     max: 15,
     speed: 400,
     glare: false
   })
-})
+}
+
+const removeTilt = (element: HTMLElement) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ;(element as any).vanillaTilt?.destroy()
+}
+
+// 删除原来的 onMounted 钩子
 </script>
+
 <template>
   <div class="labList">
     <div class="title">
@@ -90,7 +98,16 @@ onMounted(() => {
     <el-card :body-style="{ padding: '0' }">
       <ul>
         <li v-for="item in bookList" :key="item.id">
-          <div class="tilt-wrapper">
+          <div
+            class="tilt-wrapper"
+            @mouseenter="
+              ($event.currentTarget as HTMLElement) && initTilt($event.currentTarget as HTMLElement)
+            "
+            @mouseleave="
+              ($event.currentTarget as HTMLElement) &&
+              removeTilt($event.currentTarget as HTMLElement)
+            "
+          >
             <div class="card">
               <RouterLink
                 :to="{ name: 'lab', params: { experimentID: item.experimentID } }"
