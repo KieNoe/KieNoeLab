@@ -12,12 +12,12 @@ const toLabList = '/labList'
 
 // 将 notificationList 改为计算属性，这样当 t 函数的结果变化时会自动更新
 const notificationList = computed(() => [
-  { id: '18eg40', version: t('version') + ' 1.0.0', contents: [t('content1'), t('content2')] },
-  { id: '18eg41', version: t('version') + ' 1.0.1', contents: [t('content3'), t('content4')] },
-  { id: '18eg42', version: t('version') + ' 1.0.2', contents: [t('content1'), t('content2')] },
-  { id: '18eg43', version: t('version') + ' 1.0.3', contents: [t('content1'), t('content2')] },
-  { id: '18eg44', version: t('version') + ' 1.0.4', contents: [t('content1'), t('content2')] },
-  { id: '18eg45', version: t('version') + ' 1.0.4', contents: [t('content1'), t('content2')] }
+  { id: '18eg40', version: t('version') + ' 1.0.0', contents: [t('content12'), t('content11')] },
+  { id: '18eg41', version: t('version') + ' 1.0.1', contents: [t('content10'), t('content9')] },
+  { id: '18eg42', version: t('version') + ' 1.0.2', contents: [t('content8'), t('content7')] },
+  { id: '18eg43', version: t('version') + ' 1.0.3', contents: [t('content6'), t('content5')] },
+  { id: '18eg44', version: t('version') + ' 1.0.4', contents: [t('content4'), t('content3')] },
+  { id: '18eg45', version: t('version') + ' 1.0.4', contents: [t('content2'), t('content1')] }
 ])
 
 const activeIndex = ref<number | null>(null)

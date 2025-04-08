@@ -2,8 +2,8 @@ import { createI18n } from 'vue-i18n'
 
 const i18n = createI18n({
   legacy: false, // 使用 Vue 3 Composition API
-  locale: localStorage.getItem('lang') || 
-         (navigator.language.toLowerCase().includes('zh') ? 'zh' : 'en'),
+  locale:
+    localStorage.getItem('lang') || (navigator.language.toLowerCase().includes('zh') ? 'zh' : 'en'),
   fallbackLocale: 'en',
   messages: {
     en: {
@@ -12,11 +12,18 @@ const i18n = createI18n({
       More: 'More',
       msg: 'Experiment',
       version: 'Version Update',
-      content1: `Plan the overall design style to ensure consistency in icons, text, element positions, etc.
-      Configure the implementation of routing jumps and page switching functions;`,
-      content2: `Design and implement the Banner, SideBar, Loading, etc. core components; Completed`,
-      content3: `Design and implement the login and registration pages.`,
-      content4: `Optimize the interaction effects of page elements, making operations more natural and fluid, and through a variety of page color schemes to improve visual experience.`
+      content1: `Deploy Docker container for better deployment and management`,
+      content2: `Optimize login and registration code logic, fix various bugs`,
+      content3: `Optimize VanillaTilt performance usage and add free experiment mode`,
+      content4: `Fix front-end and back-end interaction bugs, optimize experiment card visual effects`,
+      content5: `Configure meta to prevent XSS and click hijacking, add timestamp after request reference`,
+      content6: `Add multi-language support and i18n translation component`,
+      content7: `Add dark theme and ripple effect on click`,
+      content8: `Complete email modification function in settings page`,
+      content9: `Improve API interface interaction functionality`,
+      content10: `Configure environment variables and request methods`,
+      content11: `Set up CI/CD workflow and SSH key authentication`,
+      content12: `Initialize experiment page with parameter panel and mouse drag functionality`
     },
     zh: {
       // 中文语言包
@@ -24,12 +31,18 @@ const i18n = createI18n({
       More: '更多',
       msg: '实验样例',
       version: '版本更新',
-      content1: `进行整体设计风格的规划，确保图标、文字、元素位置等方面的一致性；
-                  配置路由跳转及页面切换功能的实现；`,
-      content2: `  设计并实现 Banner、SideBar、Loading 等核心组件；完成
-                  Notification、labList、Content、Footer 等页面的设计与实现。 `,
-      content3: `  完成登录与注册页面的设计，实现了邮箱注册与登录功能，以及邮箱找回密码机制 `,
-      content4: `  优化页面元素的交互效果，使操作更加流畅自然，并通过多元化的页面配色方案提升视觉体验 `
+      content1: `部署 Docker 容器，优化部署管理`,
+      content2: `优化登录注册代码逻辑，修复多个BUG`,
+      content3: `优化 VanillaTilt 性能占用，添加自由实验模式`,
+      content4: `修复前后端交互BUG，优化实验卡片视觉效果`,
+      content5: `在引用请求后加入时间戳，优化缓存机制`,
+      content6: `增加主页多语言功能，加入翻译组件i18n`,
+      content7: `增加黑色主题和点击涟漪效果`,
+      content8: `完成设置页面修改邮箱业务`,
+      content9: `完善API接口交互功能`,
+      content10: `配置环境变量和请求方法`,
+      content11: `设置CI/CD工作流和SSH密钥认证`,
+      content12: `初始化实验页面，加入参数面板和鼠标拖拽功能`
     }
   }
 })

@@ -15,7 +15,7 @@ const helpList = [
   {
     id: 'help3',
     title: '如何进行模拟实验？',
-    contents: ['选择需要进行的实验项目', '按照实验指导书的步骤操作即可完成实验']
+    contents: ['选择需要进行的实验项目', '点击进入实验页面']
   },
   {
     id: 'help4',
@@ -35,7 +35,7 @@ const helpList = [
   {
     id: 'help7',
     title: '联系我们？',
-    contents: ['技术支持邮箱：support@kienoelab.com', '服务时间：周一至周五 9:00-18:00']
+    contents: ['联系邮箱：GUGUKANG114514@gmail.com', '服务时间：周一至周五 9:00-18:00']
   }
 ]
 
