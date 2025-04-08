@@ -2,7 +2,8 @@ import { createI18n } from 'vue-i18n'
 
 const i18n = createI18n({
   legacy: false, // 使用 Vue 3 Composition API
-  locale: localStorage.getItem('lang') || 'zh',
+  locale: localStorage.getItem('lang') || 
+         (navigator.language.toLowerCase().includes('zh') ? 'zh' : 'en'),
   fallbackLocale: 'en',
   messages: {
     en: {
