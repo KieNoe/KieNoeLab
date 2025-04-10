@@ -35,15 +35,15 @@ onMounted(() => {
 <style>
 /* 移除 scoped，使样式全局可用 */
 .ripple-effect {
-  position: fixed; /* 改为 fixed 定位，相对于视口 */
+  position: fixed;
   width: 20px;
   height: 20px;
-  background: var(--border-color); /* 背景色为半透明黑色 */
+  background: var(--border-color);
   border-radius: 50%;
   transform: scale(0);
   animation: rippleEffect 0.6s linear;
   pointer-events: none;
-  z-index: 9999; /* 添加高 z-index 确保在最上层 */
+  z-index: 9999;
 }
 
 @keyframes rippleEffect {
