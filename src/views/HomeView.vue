@@ -62,10 +62,10 @@ const toNotification = () => {
       </el-card>
     </div>
     <labList :name="t('msg')" :toWhere="toLabList" />
-    <div class="footer">
+    <footer class="footer">
       <div class="txt">© 2025 KieNoeLab 保留所有权利</div>
       <div class="txt">苏ICP备2025171457号</div>
-    </div>
+    </footer>
   </div>
 </template>
 <style scoped>

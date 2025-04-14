@@ -121,6 +121,8 @@ const countdown = ref(0)
 const isCountingDown = ref(false)
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
 
+let controller = new AbortController()
+
 const savaSuccess = () => {
   ElMessage({
     message: '保存成功！',
@@ -136,6 +138,12 @@ const sendVerificationCode = () => {
     ElMessage.error('请输入正确的邮箱格式')
     return
   } else {
+    if (controller) {
+      controller.abort()
+    }
+
+    // 创建新的控制器
+    controller = new AbortController()
     getResetEmailCode()
       .send()
       .then((res) => {

@@ -25,6 +25,8 @@ const request = createAlova({
         Authorization: `Bearer ${token}` // 添加 Authorization header
       }
     }
+    // 创建一个 AbortController 实例用于取消请求
+    method.config.signal = method.config.signal || new AbortController().signal
   },
 
   // 响应处理钩子函数
